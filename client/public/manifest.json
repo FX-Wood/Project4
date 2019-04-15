@@ -1,0 +1,8 @@
+{
+  "short_name": "JWT Boilerplate",
+  "name": "Afunctional JWT token auth backend",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
