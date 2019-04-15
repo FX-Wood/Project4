@@ -3,13 +3,21 @@ const bcrypt = require('bcrypt');
 
 const Schema = mongoose.Schema;
 
+const profileSchema = new Schema({
+    firstName: String,
+    lastName: String,
+    skier: Boolean,
+    snowboarder: Boolean,
+    timestamp: true
+
+})
+profileSchema.virtual('fullName')
+    .get(function() {
+        return this.firstName + this.lastName
+    })
+
+mongoose.model('Profile', profileSchema)
 const userSchema = new Schema({
-    name: {
-        type: String,
-        required: [true, 'You must enter a name'],
-        minlength: [1, 'Your name must be between 1 and 99 characters'],
-        maxlength: [99, 'Your name must be between 1 and 99 characters']
-    },
     password: {
         type: String,
         required: [true, 'You must enter a password'],
@@ -27,10 +35,19 @@ const userSchema = new Schema({
             },
             message: props => `${props.value} is not a valid email`
         }
-    }
-    
+    },
+    profile: profileSchema
 })
 
+userSchema.virtual('safe')
+    .get(function() {
+        return {
+            id: this._id,
+            email: this.email,
+            profile: this.profile,
+        }
+    })
+    
 // helper function to strip secrets from the user instance
 userSchema.set('toObject', {
     transform: function(doc, ret, options) {
