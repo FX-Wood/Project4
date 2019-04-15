@@ -19,6 +19,7 @@ const driveSchema = new Schema({
     car: carSchema,
     riders: [{type: Schema.Types.ObjectId, ref: 'User'}],
     cost: Number,
+    date: String,
     goHour: Number,
     goMin: Number,
     goNote: String,
