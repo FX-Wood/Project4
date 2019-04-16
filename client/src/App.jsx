@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import Signup from './Signup';
+import SignupFlow from './views/SignupFlow';
 import Login from './Login';
 import UserProfile from './UserProfile';
 import axios from 'axios';
+import { BrowserRouter as Router, Link, Route, Switch, Redirect } from 'react-router-dom';
+import Splash from './views/Splash'
 
 class App extends Component {
   constructor(props) {
@@ -121,31 +123,25 @@ class App extends Component {
 
   render() {
     let user = this.state.user
-    let content
-    if (user) {
-      content = (
-      <>    
-        <div className="profile-box">  
-          <UserProfile user={ user } logout={ this.logout }/>
-          <p><a onClick={ this.handleClick }>Test the protected route...</a></p>
-          <p>{ this.state.lockedResult }</p>
-      </div>
-      </>
-      )
-    } else {
-      content = (
-        <div className="authenticate">
-          <Signup toggleForm={this.handleButton} liftToken={this.liftTokenToState} liftMessage={this.liftMessageToState} clicked={this.state.signup} />
-          <Login toggleForm={this.handleButton} liftToken={this.liftTokenToState} liftMessage={this.liftMessageToState} clicked={this.state.login} />
-        </div>
-      )
+    const authProps = {
+      toggleForm: this.handleButton,
+      liftToken: this.liftTokenToState,
+      liftMessage: this.liftMessageToState
     }
     return (
-      <div className="App">
-        <header><h1>Welcome to my site!</h1></header>
-        <h3>{ this.state.message }</h3>
-        {content}
-      </div>
+      <Router>
+        <Switch>
+          <Route 
+            exact path='/'
+            render={() => <Splash user={user} />} />
+          <Route 
+            path="/signup" 
+            render={() => <SignupFlow {...authProps} />} />
+          <Route 
+            exact path="/login" 
+            render={() => <Login {...authProps}/>} />
+        </Switch>
+      </Router>
     )
   }
 }
