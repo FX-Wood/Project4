@@ -36,11 +36,9 @@ app.use('/auth/login', loginLimiter);
 app.use('/auth/signup', signupLimiter);
 
 app.use('/auth', require('./routes/auth'))
-app.use('/locked', 
-    expressJWT({ secret: process.env.JWT_SECRET })
-    .unless({method: 'POST'}), require('./routes/locked'))
+app.use('/profile',/* expressJWT({ secret: process.env.JWT_SECRET }),*/ require('./routes/profile'))
 
-app.listen(process.env.EXPRESS_PORT, () => {
-    console.log(`You're listening to the sweet sounds of ${process.env.EXPRESS_PORT} project4 in the morning...`)
-    console.log(`Oh, and the port is`, process.env.EXPRESS_PORT)
+app.listen(process.env.PORT, () => {
+    console.log(`You're listening to the sweet sounds of ${process.env.PORT} project4 in the morning...`)
+    console.log(`Oh, and the port is`, process.env.PORT)
 })
