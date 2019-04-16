@@ -12,19 +12,40 @@ class App extends Component {
       token: '',
       user: null,
       message: '',
-      lockedResult: ''
+      lockedResult: '',
+      login: false,
+      signup: false
     }
+    this.handleButton = this.handleButton.bind(this)
     this.liftTokenToState = this.liftTokenToState.bind(this)
     this.liftMessageToState = this.liftMessageToState.bind(this)
     this.checkForLocalToken = this.checkForLocalToken.bind(this)
     this.logout = this.logout.bind(this)
     this.handleClick = this.handleClick.bind(this)
   }
+  handleButton(button) {
+    console.log('handling button ', button)
+    switch(button) {
+      case 'signup':
+        this.setState({
+            signup: true,
+            login: false
+        })
+        break;
+      case 'login':
+        this.setState({
+            login: true,
+            signup: false,
+        })
+        break;
+    }
+  }
 
   liftTokenToState({token, user, message}) {
     console.log('[App.jsx]: lifting token to state', {token, user, message})
     this.setState({token, user, message})
   }
+
   liftMessageToState({ message }) {
     console.log('[App.jsx]: lifting error to state', { message })
     this.setState({ message })
@@ -114,8 +135,8 @@ class App extends Component {
     } else {
       content = (
         <div className="authenticate">
-          <Signup liftToken={this.liftTokenToState} liftMessage={this.liftMessageToState} />
-          <Login liftToken={this.liftTokenToState} liftMessage={this.liftMessageToState} />
+          <Signup toggleForm={this.handleButton} liftToken={this.liftTokenToState} liftMessage={this.liftMessageToState} clicked={this.state.signup} />
+          <Login toggleForm={this.handleButton} liftToken={this.liftTokenToState} liftMessage={this.liftMessageToState} clicked={this.state.login} />
         </div>
       )
     }

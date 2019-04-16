@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Button from '@material-ui/core/Button'
 
 export default class Login extends Component {
     constructor(props) {
@@ -63,15 +64,22 @@ export default class Login extends Component {
         });
     }
     render() {
-        return(
-            <div className="login">
-                <h3>Log in to your account</h3>
-                <form onSubmit={ this.handleSubmit } >
-                    <input onChange={this.handleEmailChange} value={this.state.email}type="email" name="email" placeholder="Enter your email..."/>
-                    <input onChange={this.handlePasswordChange} value={this.state.password} type="password" name="password" placeholder="Enter your password..."/>
-                    <input type="submit" value="Log In!"/>
-                </form>
-            </div>
-        )
+        let component;
+        if (this.props.clicked) {
+            component = (
+                <div className="login">
+                    <h3>Log in to your account</h3>
+                    <form onSubmit={ this.handleSubmit } >
+                        <input onChange={this.handleEmailChange} value={this.state.email}type="email" name="email" placeholder="Enter your email..."/>
+                        <input onChange={this.handlePasswordChange} value={this.state.password} type="password" name="password" placeholder="Enter your password..."/>
+                        <input type="submit" value="Log In!"/>
+                    </form>
+                </div>
+            )
+        } else {
+            component = <Button onClick={e => this.props.toggleForm('login')} variant="contained" color="primary" >Login</Button> 
+        }
+
+        return component
     }
 }
