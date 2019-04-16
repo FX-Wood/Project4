@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import TextField from '@material-ui/core/TextField'
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 
 export default class Signup extends Component {
     constructor(props) {
@@ -63,17 +64,26 @@ export default class Signup extends Component {
     }
     render() {
         console.log('rendering signup')
-        return (
-            <div className="signup">
-                <h3>Create a new account: </h3>
-                <form onSubmit={this.handleSubmit} >
-                    <input onChange={this.handleChange} value={this.state.first} type="text" name="name" placeholder="Enter your full name"/>
-                    <input onChange={this.handleChange} value={this.state.last} type="text" name="name" placeholder="Enter your full name"/>
-                    <input onChange={this.handleChange} value={this.state.email} type="email" name="email" placeholder="Enter your email address"/>
-                    <input onChange={this.handleChange} value={this.state.password} type="password" name="password" placeholder="Choose a password..."/>
-                    <input type="submit" value="Sign Up!"/>
-                </form>
-            </div>
-        )
+        let component;
+
+        if (this.props.clicked) {
+            component = (
+                <div className="signup">
+                    <h3>Create a new account: </h3>
+                    <form onSubmit={this.handleSubmit} >
+                        <input onChange={this.handleChange} value={this.state.first} type="text" name="name" placeholder="Enter your first name"/>
+                        <input onChange={this.handleChange} value={this.state.last} type="text" name="name" placeholder="Enter your last name"/>
+                        <input onChange={this.handleChange} value={this.state.email} type="email" name="email" placeholder="Enter your email address"/>
+                        <input onChange={this.handleChange} value={this.state.password} type="password" name="password" placeholder="Choose a password..."/>
+                        <input type="submit" value="Sign Up!"/>
+                    </form>
+                </div>
+            )
+        } else {
+            component = (
+                <Button onClick={e => this.props.toggleForm('signup')} variant="contained" color="primary">Sign Up</Button>
+            )
+        }
+        return component
     }
 }
