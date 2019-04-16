@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import TextField from '@material-ui/core/TextField'
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 
 class SignUpInitialForm extends Component {
     constructor(props) {
@@ -11,14 +13,7 @@ class SignUpInitialForm extends Component {
             email: '',
             password: '',
         }
-        this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
-    }
-    
-    handleChange(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        })
     }
     
     handleSubmit(e) {
@@ -73,6 +68,8 @@ class SignUpInitialForm extends Component {
                     <TextField  onChange={this.handleChange} value={this.state.password} type="password" name="password" placeholder="Choose a password..." variant="outlined"/>
                     <TextField  type="submit" value="Sign Up!" variant="outlined"/>
                 </form>
+                <Button component={Link} to="/splash" variant="contained" color="primary">Back</Button>
+                <Button component={Link} to="/signup/profile" variant="contained" color="primary">Forward</Button>
             </div>
         )
 

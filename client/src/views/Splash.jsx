@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom';
 
 const Splash = ({ user }) => {
     if (user) {
-        return <Redirect to={'/home'} />
+        return <Redirect to={'/dash'} />
     } else {
         return (
             <>
