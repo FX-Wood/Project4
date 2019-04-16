@@ -3,6 +3,23 @@ const bcrypt = require('bcrypt');
 
 const Schema = mongoose.Schema;
 
+const profileSchema = new Schema({
+    first: String,
+    last: String,
+    skier: Boolean,
+    snowboarder: Boolean,
+    profilePicture: String,
+}, {
+    timestamps: true
+})
+
+profileSchema.virtual('fullName')
+    .get(function() {
+        return this.firstName + this.lastName
+    })
+
+mongoose.model('Profile', profileSchema)
+
 const userSchema = new Schema({
     password: {
         type: String,
@@ -22,7 +39,8 @@ const userSchema = new Schema({
             message: props => `${props.value} is not a valid email`
         }
     },
-    profile: {type: Schema.Types.ObjectId, ref: 'Profile'}
+    // profile: {type: Schema.Types.ObjectId, ref: 'Profile'}
+    profile: profileSchema
 })
 
 userSchema.virtual('safe')

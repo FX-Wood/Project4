@@ -23,10 +23,10 @@ router.post('/signup', (req, res, next) => {
             // if no, create the user in the db
             
             let user = new User({
-                name: req.body.name,
                 email: req.body.email,
-                password: req.body.password
+                password: req.body.password,
             })
+            user.profile = {first: req.body.first, last: req.body.last}
             console.log('user instance', user)
             user.save((err, newUser) => {
                 console.log('done saving, here are the results', {err, newUser})

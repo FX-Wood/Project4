@@ -21,6 +21,7 @@ export default class Signup extends Component {
             [e.target.name]: e.target.value
         })
     }
+
     handleSubmit(e) {
         console.log('signing up...')
         e.preventDefault()
@@ -71,11 +72,11 @@ export default class Signup extends Component {
                 <div className="signup">
                     <h3>Create a new account: </h3>
                     <form onSubmit={this.handleSubmit} >
-                        <input onChange={this.handleChange} value={this.state.first} type="text" name="name" placeholder="Enter your first name"/>
-                        <input onChange={this.handleChange} value={this.state.last} type="text" name="name" placeholder="Enter your last name"/>
-                        <input onChange={this.handleChange} value={this.state.email} type="email" name="email" placeholder="Enter your email address"/>
-                        <input onChange={this.handleChange} value={this.state.password} type="password" name="password" placeholder="Choose a password..."/>
-                        <input type="submit" value="Sign Up!"/>
+                        <TextField  onChange={this.handleChange} value={this.state.first} type="text" name="first" placeholder="Enter your first name" variant="outlined"/>
+                        <TextField  onChange={this.handleChange} value={this.state.last} type="text" name="last" placeholder="Enter your last name" variant="outlined"/>
+                        <TextField  onChange={this.handleChange} value={this.state.email} type="email" name="email" placeholder="Enter your email address" variant="outlined"/>
+                        <TextField  onChange={this.handleChange} value={this.state.password} type="password" name="password" placeholder="Choose a password..." variant="outlined"/>
+                        <TextField  type="submit" value="Sign Up!" variant="outlined"/>
                     </form>
                 </div>
             )
