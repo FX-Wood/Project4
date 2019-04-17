@@ -1,79 +1,28 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 
-class SignUpInitialForm extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            first: '',
-            last: '',
-            email: '',
-            password: '',
-        }
-        this.handleSubmit = this.handleSubmit.bind(this)
-    }
-    
-    handleSubmit(e) {
-        console.log('signing up...')
+const SignUpInitialForm = ({ handleChange, first, last, email, password, history }) => {
+    const done = (e) => {
+        console.log('done')
         e.preventDefault()
-        axios.post('/auth/signup', this.state)
-        .then( res => {
-            console.log('res.data', res.data)
-            if (res.data.type === 'error') {
-                console.log('error', res.data)
-                this.setState({
-                    message: res.data.message
-                })
-            } else {
-                console.log('res.data', res.data)
-                console.log('token', res.data.token)
-                localStorage.setItem('jwtToken', res.data.token)
-                this.props.liftToken(res.data)
-    
-            }
-        }).catch(err => {
-            console.log(err, err.response, err.status)
-            console.log('catching error')
-            let message;
-            if (err.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                message = `${err.response.status}: ${err.response.data.message || err}`
-            } else if (err.request) {
-                // The request was made but no response was received
-                console.log(err.request)
-                message = '404: server not found'
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                console.log('Error', err.message);
-                message = 'Error' + err.message
-            }
-            console.log(err)
-            if (err.status === '429') message = `${err.response.status}: too many requests`
-            // this.setState({ message })
-            this.props.liftMessage({ message })
-        });
+        console.log('history', history)
+        history.push('/signup/profile')
     }
-    render() {
-        return (
-            <div className="signup-initial-form">
-                <h3>Create a new account: </h3>
-                <form onSubmit={this.handleSubmit} >
-                    <TextField  onChange={this.handleChange} value={this.state.first} type="text" name="first" placeholder="Enter your first name" variant="outlined"/>
-                    <TextField  onChange={this.handleChange} value={this.state.last} type="text" name="last" placeholder="Enter your last name" variant="outlined"/>
-                    <TextField  onChange={this.handleChange} value={this.state.email} type="email" name="email" placeholder="Enter your email address" variant="outlined"/>
-                    <TextField  onChange={this.handleChange} value={this.state.password} type="password" name="password" placeholder="Choose a password..." variant="outlined"/>
-                    <TextField  type="submit" value="Sign Up!" variant="outlined"/>
-                </form>
-                <Button component={Link} to="/splash" variant="contained" color="primary">Back</Button>
-                <Button component={Link} to="/signup/profile" variant="contained" color="primary">Forward</Button>
-            </div>
-        )
-
-    }
+    return (
+        <div className="signup-initial-form">
+            <h3>Create a new account: </h3>
+            <form onSubmit={done} >
+                <TextField  onChange={handleChange} value={first} type="text" name="first" placeholder="Enter your first name" variant="outlined"/>
+                <TextField  onChange={handleChange} value={last} type="text" name="last" placeholder="Enter your last name" variant="outlined"/>
+                <TextField  onChange={handleChange} value={email} type="email" name="email" placeholder="Enter your email address" variant="outlined"/>
+                <TextField  onChange={handleChange} value={password} type="password" name="password" placeholder="Choose a password..." variant="outlined"/>
+            </form>
+            <Button component={Link} to="/" variant="contained" color="primary">Back</Button>
+            <Button component={Link} to="/signup/profile" variant="contained" color="primary">Forward</Button>
+        </div>
+    )
 }
 
 export default SignUpInitialForm
