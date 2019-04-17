@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
-import SignupFlow from './views/SignupFlow';
-import Login from './Login';
 import axios from 'axios';
 import { BrowserRouter as Router, Link, Route, Switch, Redirect } from 'react-router-dom';
+
+// Pages
+import SignupFlow from './views/SignupFlow';
+import Login from './Login';
 import Splash from './views/Splash';
 import Dash from './views/Dash';
+
+// material UI
+import CssBaseline from '@material-ui/core/CssBaseline';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import theme from './utilities/theme';
 
 class App extends Component {
   constructor(props) {
@@ -122,6 +129,7 @@ class App extends Component {
   }
 
   render() {
+    console.log(theme)
     let user = this.state.user
     const authProps = {
       toggleForm: this.handleButton,
@@ -129,21 +137,24 @@ class App extends Component {
       liftMessage: this.liftMessageToState
     }
     return (
-      <Router>
-        <Switch>
-          <Route 
-            exact path='/'
-            render={() => <Splash user={user} />} />
-          <Route 
-            path="/signup" 
-            render={() => <SignupFlow {...authProps} />} />
-          <Route 
-            exact path="/login" 
-            render={() => <Login {...authProps}/>} />
-          <Route
-            path="/dash" render={() => <Dash user={user} logout={this.logout} /> } />
-        </Switch>
-      </Router>
+      <MuiThemeProvider theme={theme}>
+        <Router>
+          <CssBaseline />
+          <Switch>
+            <Route 
+              exact path='/'
+              render={() => <Splash user={user} />} />
+            <Route 
+              path="/signup" 
+              render={() => <SignupFlow {...authProps} />} />
+            <Route 
+              exact path="/login" 
+              render={() => <Login {...authProps}/>} />
+            <Route
+              path="/dash" render={() => <Dash user={user} logout={this.logout} /> } />
+          </Switch>
+        </Router>
+      </MuiThemeProvider>
     )
   }
 }
