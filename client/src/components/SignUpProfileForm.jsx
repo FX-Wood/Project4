@@ -21,11 +21,11 @@ const signupProfileForm = (props) => {
     const { profilePicture, skier, snowboarder, complicated, homeMountain, handleChange, handleCheckbox, handleFileChange, submitSignup, classes } = props
     return (
         <div className={classes.root}>
-            <Grid container spacing={24}>
-                <Grid item xs={12} >
+            <Grid container direction="column" spacing={24} justify="center" alignItems="center">
+                <Grid item xs={12}  >
                     <SignUpAvatar src={profilePicture} handleFileChange={handleFileChange} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} >
                     <FormGroup row>
                         <FormControlLabel 
                             control={

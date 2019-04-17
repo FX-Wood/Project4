@@ -4,6 +4,7 @@ import { Route } from 'react-router-dom';
 import SignUpInitialForm from '../components/SignUpInitialForm';
 import SignUpProfileForm from '../components/SignUpProfileForm';
 import Grid from '@material-ui/core/Grid';
+import Typeography from '@material-ui/core/Typography';
 
 export default class SignupFlow extends Component {
     constructor(props) {
@@ -117,7 +118,8 @@ export default class SignupFlow extends Component {
         
         return (
             <div className="signup">
-                <Grid container >
+                <Grid container justify="center" >
+                <Typeography variant="display3">Sign Up</Typeography>
                     <Route exact path="/signup" render={() => <SignUpInitialForm {...initialProps} /> } />
                     <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileProps}  /> } />
                 </Grid>
