@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Route } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import SignUpInitialForm from '../components/SignUpInitialForm';
 import SignUpProfileForm from '../components/SignUpProfileForm';
-
+import Grid from '@material-ui/core/Grid';
 
 export default class SignupFlow extends Component {
     constructor(props) {
@@ -17,18 +16,40 @@ export default class SignupFlow extends Component {
             profilePicture: null,
             skier: false,
             snowboarder: false,
-            complicated: true,
+            complicated: false,
             homeMountain: ''
         }
+        this.handleCheckbox = this.handleCheckbox.bind(this)
         this.handleChange = this.handleChange.bind(this)
+        this.handleFileChange = this.handleFileChange.bind(this)
         this.submitSignup = this.submitSignup.bind(this)
     }
+
     handleChange(e) {
         console.log('handling change', e.target, this)
         this.setState({
             [e.target.name]: e.target.value
         })
     }
+
+    handleCheckbox(e) {
+        this.setState({
+            [e.target.name]: e.target.checked
+        })
+    }
+
+    handleFileChange(e) {
+        console.log('handling file change', e.target.files, this)
+        console.log('name', e.target.name)
+        console.log('value', e.target.value)
+        URL.revokeObjectURL(this.state[e.target.name])
+        const blob = URL.createObjectURL(e.target.files[0])
+        console.log(blob)
+        this.setState({
+            [e.target.name]: blob
+        })
+    }
+
     submitSignup(e) {
         console.log('signing up...')
         e.preventDefault()
@@ -72,13 +93,14 @@ export default class SignupFlow extends Component {
     }
     
     render() {
-        console.log('rendering signupFlow @ stage', this.state.stage);
+        console.log('rendering signupFlow');
         const initialProps = {
             first: this.state.first,
             last: this.state.last,
             email: this.state.email,
             password: this.state.password,
-            handleChange: this.handleChange
+            handleChange: this.handleChange,
+            
         }
 
         const profileProps = {
@@ -88,13 +110,17 @@ export default class SignupFlow extends Component {
             complicated: this.state.complicated,
             homeMountain: this.state.homeMountain,
             handleChange: this.handleChange,
-            submitSignup: this.submitSignup
+            submitSignup: this.submitSignup,
+            handleFileChange: this.handleFileChange,
+            handleCheckbox: this.handleCheckbox,
         }
         
         return (
             <div className="signup">
-                <Route exact path="/signup" render={() => <SignUpInitialForm {...initialProps} /> } />
-                <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileProps}  /> } />
+                <Grid container >
+                    <Route exact path="/signup" render={() => <SignUpInitialForm {...initialProps} /> } />
+                    <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileProps}  /> } />
+                </Grid>
             </div>
         )
     }
