@@ -3,14 +3,27 @@ const bcrypt = require('bcrypt');
 
 const Schema = mongoose.Schema;
 
+const profilePictureSchema = new Schema({
+    fieldname: String,
+    originalname: String,
+    encoding: String,
+    mimetype: String,
+    size: String,
+    buffer: Buffer,
+}, {
+    timestamps: true
+})
+
+mongoose.model('ProfilePicture', profilePictureSchema)
+
 const profileSchema = new Schema({
     first: String,
     last: String,
-    profilePicture: String,
     skier: Boolean,
     snowboarder: Boolean,
     complicated: Boolean,
     homeMountain: String,
+    profilePicture: profilePictureSchema,
 }, {
     timestamps: true
 })
