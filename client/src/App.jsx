@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import axios from 'axios';
 import { BrowserRouter as Router, Link, Route, Switch, Redirect } from 'react-router-dom';
 
