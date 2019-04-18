@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
-import { BrowserRouter as Router, Link, Route, Switch, Redirect } from 'react-router-dom';
+import { Link, Route, Switch, Redirect } from 'react-router-dom';
+import { withSnackbar } from 'notistack';
 
 // Pages
 import SignupFlow from './views/SignupFlow';
@@ -58,6 +59,8 @@ class App extends Component {
   liftMessageToState({ message }) {
     console.log('[App.jsx]: lifting error to state', { message })
     this.setState({ message })
+    this.props.enqueueSnackbar(message)
+
   }
 
   logout() {
@@ -138,7 +141,6 @@ class App extends Component {
     }
     return (
       <MuiThemeProvider theme={theme}>
-        <Router>
           <CssBaseline />
           <Switch>
             <Route 
@@ -153,10 +155,9 @@ class App extends Component {
             <Route
               path="/dash" render={() => <Dash user={user} logout={this.logout} /> } />
           </Switch>
-        </Router>
       </MuiThemeProvider>
     )
   }
 }
 
-export default App;
+export default withSnackbar(App);

@@ -6,6 +6,7 @@ import SignUpProfileForm from '../components/SignUpProfileForm';
 import Grid from '@material-ui/core/Grid';
 import Typeography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import { withSnackbar } from 'notistack';
 
 const styles = theme => ({
     signup: {
@@ -98,7 +99,7 @@ class SignupFlow extends Component {
                 console.log('token', res.data.token)
                 localStorage.setItem('jwtToken', res.data.token)
                 this.props.liftToken(res.data)
-    
+                this.props.history.push('/dash')
             }
         }).catch(err => {
             console.log(err, err.response, err.status)
@@ -120,7 +121,8 @@ class SignupFlow extends Component {
             console.log(err)
             if (err.status === '429') message = `${err.response.status}: too many requests`
             // this.setState({ message })
-            this.props.liftMessage({ message })
+            this.props.enqueueSnackbar(message, {variant: 'error'})
+            this.props.liftMessage({ type: 'error', message })
         });
     }
     
@@ -160,4 +162,4 @@ class SignupFlow extends Component {
     }
 }
 
-export default withStyles(styles)(SignupFlow)
+export default withSnackbar(withStyles(styles)(SignupFlow))
