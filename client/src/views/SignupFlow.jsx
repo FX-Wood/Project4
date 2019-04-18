@@ -63,15 +63,18 @@ class SignupFlow extends Component {
     async submitSignup(e) {
         console.log('signing up...')
         e.preventDefault()
-
-        const profilePicture = await ((url) => {
-            return axios.get(url, { responseType: 'arraybuffer' })
+        
+        const config = {
+            headers: { type: 'content-type: multi-part/form' }
+        }
+        const data = this.state
+        data.profilePicture = await ((url) => {
+            return axios.get(url)
             .then(response => {
-                console.log(response.data)
-                return new File(response.data)
+                return new File([response.data], Date.now())
             })
         })(this.state.profilePicture)
-        axios.post('/auth/signup', this.state)
+        axios.post('/auth/signup', data, config)
         .then( res => {
             console.log('res.data', res.data)
             if (res.data.type === 'error') {
@@ -136,7 +139,7 @@ class SignupFlow extends Component {
         return (
             <div className="signup">
                 <Typeography variant="h3">Sign Up</Typeography>
-                <Grid container direction="column" alignItems="center" spacing={24}>
+                <Grid container direction="row" alignItems="center" spacing={24}>
                     <Route exact path="/signup" render={() => <SignUpInitialForm {...initialProps} /> } />
                     <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileProps}  /> } />
                 </Grid>

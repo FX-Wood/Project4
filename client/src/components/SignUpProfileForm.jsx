@@ -66,7 +66,7 @@ const signupProfileForm = (props) => {
                 <Button component={Link} to="/signup" variant="contained" color="primary">Back</Button>
             </Grid>
             <Grid item xs={6}>
-                <Button component={Link} disabled to="/signup/profile" variant="contained" color="primary">Next</Button>
+                <Button variant="contained" color="primary" onClick={ submitSignup }>Finish signing up</Button>
             </Grid>
         </>
     )
