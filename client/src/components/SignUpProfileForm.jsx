@@ -11,7 +11,7 @@ import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 
 const signupProfileForm = (props) => {
-    const { profilePicture, skier, snowboarder, complicated, homeMountain, handleChange, handleCheckbox, handleFileChange, submitSignup, classes } = props
+    const { profilePicture, skier, snowboarder, complicated, homeMountain, handleChange, handleCheckbox, handleFileChange, submitSignup } = props
     return (
         <>
             <Grid item xs={12}  >
@@ -51,7 +51,7 @@ const signupProfileForm = (props) => {
                     />
                 </FormGroup>
             </Grid>
-            <Grid item>
+            <Grid item xs={12}>
                 <TextField
                     name="homeMountain"
                     label="Home Mountain"
@@ -66,7 +66,7 @@ const signupProfileForm = (props) => {
                 <Button component={Link} to="/signup" variant="contained" color="primary">Back</Button>
             </Grid>
             <Grid item xs={6}>
-                <Button component={Link} disabled to="/signup/profile" variant="contained" color="primary">Next</Button>
+                <Button onClick={submitSignup} variant="contained" color="primary">Finish Signing Up</Button>
             </Grid>
         </>
     )

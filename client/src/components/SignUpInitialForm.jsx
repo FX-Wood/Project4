@@ -13,7 +13,7 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
     }
     return (
         <>
-            <Grid item >
+            <Grid item xs={12}>
                 <TextField
                     onChange={handleChange}
                     value={first}
@@ -22,8 +22,9 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
                     label="First Name"
                     placeholder="Enter your first name"
                     variant="outlined"
+                    margin='normal'
                 />
-                <TextField
+                <TextField 
                     onChange={handleChange}
                     value={last}
                     type="text"
@@ -31,9 +32,10 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
                     label="Last Name"
                     placeholder="Enter your last name"
                     variant="outlined"
+                    margin='normal'
                 />
             </Grid>
-            <Grid item>
+            <Grid item xs={12}>
                 <TextField
                     onChange={handleChange}
                     value={email}
@@ -44,7 +46,7 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
                     variant="outlined"
                 />
             </Grid>
-            <Grid item>
+            <Grid item xs={12}>
                 <TextField
                     onChange={handleChange}
                     value={password}
@@ -55,8 +57,10 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
                     variant="outlined"
                 />
             </Grid>
-            <Grid item>
+            <Grid item sm={6}>
                 <Button component={Link} to="/" variant="contained" color="primary">Back</Button>
+            </Grid>
+            <Grid item sm={6}>
                 <Button component={Link} to="/signup/profile" variant="contained" color="primary">Next</Button>
             </Grid>
         </>

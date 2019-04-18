@@ -12,7 +12,7 @@ const UploadProfilePic = (props) => {
     const { handleFileChange, classes } = props
     return (
         <>
-            <input type="file" id="sign-up-profile-image-upload" accept="image/*" name="profilePicture" className={classes.input} onChange={handleFileChange} />
+            <input type="file" id="sign-up-profile-image-upload" accept=".jpg,.jpeg,.png" name="profilePicture" className={classes.input} onChange={handleFileChange} />
             <label htmlFor="sign-up-profile-image-upload">
                 <Button component={'span'} variant="contained" color="primary">Upload Picture</Button>
             </label>
