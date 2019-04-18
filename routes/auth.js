@@ -3,10 +3,40 @@ const router = express.Router();
 const User = require('../models/user');
 const JWT = require('jsonwebtoken');
 
+const cloudinary = require('cloudinary');
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+})
+
+const cloudinaryStorage = require('multer-storage-cloudinary');
+cloudinaryStorage.config({
+    cloudinary
+})
+const multer = require('multer');
+const imageParser = multer({ storage });
+
+// profile schema
+// email: '',
+// password: '',
+// first: '',
+// last: '',
+// profilePicture: null,
+// skier: false,
+// snowboarder: false,
+// complicated: false,
+// homeMountain: ''
+
 // Route for signup
-router.post('/signup', (req, res, next) => {
+router.post('/signup', imageParser.single('profilePicture'), (req, res, next) => {
     console.log('POST /signup', req.body)
     // see if the email is already in the db
+    const { first, last, skier, snowboarder, complicated, homeMountain } = req.body
+    const { profilePicture } = req.file.url
+    
+    console.log('req.file', req.file)
+    console.log('req.body', req.body)
     User.findOne({email: req.body.email}, (err, user) => {
         console.log('POST /signup, {err, user}', {err, user} )
         // if db error, catch it 
@@ -26,7 +56,8 @@ router.post('/signup', (req, res, next) => {
                 email: req.body.email,
                 password: req.body.password,
             })
-            user.profile = {first: req.body.first, last: req.body.last}
+            user.profile = {first, last, profilePicture, skier, snowboarder, complicated, homeMountain}
+
             console.log('user instance', user)
             user.save((err, newUser) => {
                 console.log('done saving, here are the results', {err, newUser})
