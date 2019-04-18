@@ -5,8 +5,17 @@ import SignUpInitialForm from '../components/SignUpInitialForm';
 import SignUpProfileForm from '../components/SignUpProfileForm';
 import Grid from '@material-ui/core/Grid';
 import Typeography from '@material-ui/core/Typography';
+import { withStyles } from '@material-ui/core/styles';
 
-export default class SignupFlow extends Component {
+const styles = theme => ({
+    signup: {
+        display: 'flex',
+        flexDirection: 'column',
+        paddingTop: '24px'
+    }
+})
+
+class SignupFlow extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -118,8 +127,8 @@ export default class SignupFlow extends Component {
         
         return (
             <div className="signup">
-                <Grid container justify="center" >
-                <Typeography variant="display3">Sign Up</Typeography>
+                <Typeography variant="h3">Sign Up</Typeography>
+                <Grid container direction="column" alignItems="center" spacing={24}>
                     <Route exact path="/signup" render={() => <SignUpInitialForm {...initialProps} /> } />
                     <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileProps}  /> } />
                 </Grid>
@@ -127,3 +136,5 @@ export default class SignupFlow extends Component {
         )
     }
 }
+
+export default withStyles(styles)(SignupFlow)

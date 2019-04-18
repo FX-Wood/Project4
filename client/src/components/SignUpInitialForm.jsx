@@ -12,7 +12,7 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
         history.push('/signup/profile')
     }
     return (
-        <Grid container spacing={24} direction="column" justify="center" alignItems="center">
+        <>
             <Grid item >
                 <TextField
                     onChange={handleChange}
@@ -55,11 +55,11 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
                     variant="outlined"
                 />
             </Grid>
-            <Grid item container justify="space-between">
+            <Grid item>
                 <Button component={Link} to="/" variant="contained" color="primary">Back</Button>
-                <Button component={Link} to="/signup/profile" variant="contained" color="primary">Forward</Button>
+                <Button component={Link} to="/signup/profile" variant="contained" color="primary">Next</Button>
             </Grid>
-        </Grid>
+        </>
     )
 }
 
