@@ -5,7 +5,13 @@ router.route('/')
     // profile
     .get((req, res) => {
         console.log('GET /profile', req.originalUrl)
-        res.send('GET profile')
+        User.findOne({email:req.user.email}, 'safe', (error, user) => {
+            if (err) {
+                res.status(500).json({ type: 'error', message:'there was an error retrieving your profile', data: null })
+            } else {
+                res.status(200).json({ type: 'success', message:'profile found', data: user})
+            }
+        })
     })
     .post(async (req, res) => {
         console.log('POST /profile', req.originalUrl)
