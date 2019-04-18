@@ -60,9 +60,17 @@ class SignupFlow extends Component {
         })
     }
 
-    submitSignup(e) {
+    async submitSignup(e) {
         console.log('signing up...')
         e.preventDefault()
+
+        const profilePicture = await ((url) => {
+            return axios.get(url, { responseType: 'arraybuffer' })
+            .then(response => {
+                console.log(response.data)
+                return new File(response.data)
+            })
+        })(this.state.profilePicture)
         axios.post('/auth/signup', this.state)
         .then( res => {
             console.log('res.data', res.data)
