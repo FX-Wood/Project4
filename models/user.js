@@ -6,9 +6,11 @@ const Schema = mongoose.Schema;
 const profileSchema = new Schema({
     first: String,
     last: String,
+    profilePicture: String,
     skier: Boolean,
     snowboarder: Boolean,
-    profilePicture: String,
+    complicated: Boolean,
+    homeMountain: String,
 }, {
     timestamps: true
 })
