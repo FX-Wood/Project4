@@ -11,7 +11,9 @@ const styles = theme => ({
     signup: {
         display: 'flex',
         flexDirection: 'column',
-        paddingTop: '24px'
+        paddingTop: '24px',
+        alignItems: 'center',
+        JustifyContent: 'center',
     }
 })
 
@@ -63,17 +65,26 @@ class SignupFlow extends Component {
     async submitSignup(e) {
         console.log('signing up...')
         e.preventDefault()
-        
+        const profilePicture = await ((url) => {
+            return axios.get(url)
+            .then(response => {
+                console.log(response)
+                return { type: response.headers["content-type"], data: response.data }
+                // return response.data
+            })
+        })(this.state.profilePicture)
         const config = {
             headers: { type: 'content-type: multi-part/form' }
         }
-        const data = this.state
-        data.profilePicture = await ((url) => {
-            return axios.get(url)
-            .then(response => {
-                return new File([response.data], Date.now())
-            })
-        })(this.state.profilePicture)
+        const data = new FormData()
+        for (let key in this.state) {
+            if (key !== 'profilePicture'){
+                data.append(key, this.state[key])
+            }
+        }
+        const file = new File([profilePicture.data], 'profilePicture', { type: profilePicture.type})
+        console.log(file)
+        data.append('profilePicture', file)
         axios.post('/auth/signup', data, config)
         .then( res => {
             console.log('res.data', res.data)
@@ -115,6 +126,7 @@ class SignupFlow extends Component {
     
     render() {
         console.log('rendering signupFlow');
+        const { classes } = this.props
         const initialProps = {
             first: this.state.first,
             last: this.state.last,
@@ -137,13 +149,13 @@ class SignupFlow extends Component {
         }
         
         return (
-            <div className="signup">
+            <Grid className={classes.signup}>
                 <Typeography variant="h3">Sign Up</Typeography>
-                <Grid container direction="row" alignItems="center" spacing={24}>
+                <Grid container direction="column" alignItems="center" justify="center" spacing={24} >
                     <Route exact path="/signup" render={() => <SignUpInitialForm {...initialProps} /> } />
                     <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileProps}  /> } />
                 </Grid>
-            </div>
+            </Grid>
         )
     }
 }
