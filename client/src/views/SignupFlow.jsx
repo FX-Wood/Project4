@@ -11,7 +11,9 @@ const styles = theme => ({
     signup: {
         display: 'flex',
         flexDirection: 'column',
-        paddingTop: '24px'
+        paddingTop: '24px',
+        maxWidth: 600,
+        margin: '0 auto'
     }
 })
 
@@ -53,17 +55,34 @@ class SignupFlow extends Component {
         console.log('name', e.target.name)
         console.log('value', e.target.value)
         URL.revokeObjectURL(this.state[e.target.name])
-        const blob = URL.createObjectURL(e.target.files[0])
-        console.log(blob)
+        const blobPointer = URL.createObjectURL(e.target.files[0])
+        console.log(blobPointer)
         this.setState({
-            [e.target.name]: blob
+            [e.target.name]: blobPointer
         })
     }
 
-    submitSignup(e) {
+    async submitSignup(e) {
         console.log('signing up...')
         e.preventDefault()
-        axios.post('/auth/signup', this.state)
+        const options = {headers: {'Content-Type':'multipart/form-data'}}
+        const signupData = new FormData();
+        for (let key in this.state) {
+            signupData.append(key, this.state[key])
+        }
+        const getBase64 = async (url, container) => {
+            let blob = await fetch(url).then(r => blob)
+            
+            let reader = new FileReader()
+            reader.addEventListener('load',((e) => {
+                container = e.target.results
+            })
+            reader.readAsBinaryString(url)
+        }
+        let image;
+        await getBase64(this.state.profilePicture, image)
+        signupData.append('profilePicture', image)
+        axios.post('/auth/signup', signupData, options)
         .then( res => {
             console.log('res.data', res.data)
             if (res.data.type === 'error') {
@@ -103,22 +122,23 @@ class SignupFlow extends Component {
     }
     
     render() {
-        console.log('rendering signupFlow');
-        const initialProps = {
-            first: this.state.first,
-            last: this.state.last,
-            email: this.state.email,
-            password: this.state.password,
+        const { classes } = this.props
+        const { first, last, email, password, profilePicture, skier, snowboarder, complicated, homeMountain } = this.state
+        
+        const initialFormProps = {
+            first,
+            last,
+            email,
+            password,
             handleChange: this.handleChange,
-            
         }
 
-        const profileProps = {
-            profilePicture: this.state.profilePicture,
-            skier: this.state.skier,
-            snowboarder: this.state.snowboarder,
-            complicated: this.state.complicated,
-            homeMountain: this.state.homeMountain,
+        const profileFormProps = {
+            profilePicture,
+            skier,
+            snowboarder,
+            complicated,
+            homeMountain,
             handleChange: this.handleChange,
             submitSignup: this.submitSignup,
             handleFileChange: this.handleFileChange,
@@ -126,13 +146,15 @@ class SignupFlow extends Component {
         }
         
         return (
-            <div className="signup">
-                <Typeography variant="h3">Sign Up</Typeography>
-                <Grid container direction="column" alignItems="center" spacing={24}>
-                    <Route exact path="/signup" render={() => <SignUpInitialForm {...initialProps} /> } />
-                    <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileProps}  /> } />
+            <Grid className={classes.signup} >
+                <Grid container direction="row" justify="space-around" spacing={24}>
+                <Grid item xs={12}>
+                    <Typeography variant="h3">Sign Up</Typeography>
                 </Grid>
-            </div>
+                    <Route exact path="/signup" render={() => <SignUpInitialForm {...initialFormProps} /> } />
+                    <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileFormProps}  /> } />
+                </Grid>
+            </Grid>
         )
     }
 }
