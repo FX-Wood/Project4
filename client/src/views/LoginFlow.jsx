@@ -42,8 +42,7 @@ class LoginFlow extends Component {
                 console.log(res.status, res.data)
                 console.log('token', res.data.token)
                 localStorage.setItem('jwtToken', res.data.token)
-                this.props.liftToken(res.data)
-                this.props.enqueue('Login successful', {variant: 'success'})
+                return this.props.login(res.data)
             }
         }).catch( err => {
             console.log('catching error')
@@ -61,7 +60,7 @@ class LoginFlow extends Component {
                 console.log('Error', err.message);
                 message = 'Error' + err.message
             }
-            this.props.liftMessage({ message })
+            console.log(err)
             this.props.enqueueSnackbar(message, {variant: 'error'})
         });
     }

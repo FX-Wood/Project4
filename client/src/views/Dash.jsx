@@ -1,8 +1,12 @@
+import axios from 'axios'
 import React, { Component } from 'react';
 import ReAuthorize from '../components/ReAuthorize';
-import Button from '@material-ui/core/Button';
-import axios from 'axios'
 import { withSnackbar } from 'notistack';
+
+// material ui
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 class Dash extends Component {
     constructor(props) {
@@ -18,30 +22,44 @@ class Dash extends Component {
             complicated: false,
             homeMountain: ''
         }
+        this.getProfile = this.getProfile.bind(this)
     }
     componentDidMount() {
-        console.log(axios.defaults.headers)
-        axios.get('/user').then(res => {
-            console.log(res.data)
-            this.setState(res.data)
-        }).catch(err => {
-            console.log(err)
-            this.props.enqueueSnackbar(err, {variant: 'error'})
-        })
+        console.log('dash did mount')
+        this.getProfile()
+    }
+    getProfile() {
+        if (this.props.user) {
+            console.log(axios.defaults.headers)
+            axios.get('/user').then(res => {
+                console.log('GET /user', res.data)
+                this.setState(res.data)
+            }).catch(err => {
+                console.log(err)
+                this.props.enqueueSnackbar(JSON.stringify(err), {variant: 'error'})
+            })
+        }
     }
     render() {
-        const { first, last, snowboarder, skier, profilePicture } = this.state
         let content;
         if (this.props.user) {
-            content = (
-                <div className="dash">
-                    <h1>Dashboard</h1>
-                    <img src={profilePicture.buffer} alt=""/>
-                    <Button onClick={this.props.logout} variant="contained" color="primary" />
-                </div>
-            )
+            const { first, last, snowboarder, skier, profilePicture } = this.props.user.profile
+            console.log(profilePicture)
+                content = (
+                    <Grid container direction='column' justify="center" alignItems="center" spacing={24} style={{minHeight: '100vh'}}>
+                        <Grid item>
+                            <Typography variant="h3">Dashboard</Typography>
+                        </Grid>
+                        <Grid item>
+                            <img src={ URL.createObjectURL(new File([profilePicture.buffer], 'profilePicture', {type: profilePicture.mimetype}))} alt="user avatar"/>
+                        </Grid>
+                        <Grid item>
+                            <Button onClick={this.props.logout} variant="contained" color="primary" >Logout</Button>
+                        </Grid>
+                    </Grid>
+                )
         } else {
-            content = <ReAuthorize />
+            content = <ReAuthorize login={this.props.login} />
         }
         return content
     }

@@ -98,8 +98,7 @@ class SignupFlow extends Component {
                 console.log('res.data', res.data)
                 console.log('token', res.data.token)
                 localStorage.setItem('jwtToken', res.data.token)
-                this.props.liftToken(res.data)
-                this.props.history.push('/dash')
+                this.props.login(res.data)
             }
         }).catch(err => {
             console.log(err, err.response, err.status)
@@ -122,7 +121,7 @@ class SignupFlow extends Component {
             if (err.status === '429') message = `${err.response.status}: too many requests`
             // this.setState({ message })
             this.props.enqueueSnackbar(message, {variant: 'error'})
-            this.props.liftMessage({ type: 'error', message })
+            // this.props.liftMessage({ type: 'error', message })
         });
     }
     
