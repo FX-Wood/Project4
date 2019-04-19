@@ -3,13 +3,10 @@ const Schema = mongoose.Schema;
 
 const rideSchema = new Schema({
     user: {type: Schema.Types.ObjectId, ref: 'User'},
-    date: String,
-    goHour: Number,
-    goMin: Number,
-    goflex: Boolean,
-    endHour: Number,
-    endMin: Number,
-    endFlex: String,
+    start: Date,
+    startFlex: Boolean,
+    end: Date,
+    endFlex: Boolean,
     note: String,
     offer: Number,
 })

@@ -10,6 +10,7 @@ import SignupFlow from './views/SignupFlow';
 import LoginFlow from './views/LoginFlow';
 import Dash from './views/Dash';
 import BrowseMountains from './views/BrowseMountains';
+import RideFlow from './views/RideFlow';
 
 // material UI
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -81,8 +82,11 @@ class App extends Component {
     })
   }
 
-  checkForLocalToken() {
+  checkForLocalToken(destinationUrl) {
     console.log('[App.jsx]: checkForLocalToken(), localStorage["jwtToken"]', localStorage["jwtToken"])
+    const currentLocation = this.props.history.location
+    console.log({ currentLocation })
+    const destination = destinationUrl || '/dash'
     let token = localStorage.getItem('jwtToken')
     if (!token || token === 'undefined') {
       // If there is no token, remove the entry in localStorage
@@ -112,8 +116,8 @@ class App extends Component {
           axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`
           // show success message
           this.props.enqueueSnackbar('Login successful', {variant: 'success'})
-          
-          this.props.history.push('/dash')
+          // redirect to page
+          this.props.history.push(destination)
           // Put token in state
           this.setState({
             token: res.data.token,
@@ -157,10 +161,14 @@ class App extends Component {
               render={() => <LoginFlow {...authProps}/>} />
             <Route
               path="/dash" render={() => <Dash user={user} login={this.liftTokenToState} logout={this.logout} /> } />
-          <Route
-            exact path="/browse/mtn"
-            render={ ()=> <BrowseMountains user={user} addMountain={this.addMountain} {...authProps} />}
-          />
+            <Route
+              exact path="/browse/mtn"
+              render={ ()=> <BrowseMountains user={user} addMountain={this.addMountain} {...authProps} />}
+            />
+            <Route
+              exact path="/ride/new"
+              component={RideFlow}
+            />
           </Switch>
       </MuiThemeProvider>
     )
