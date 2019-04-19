@@ -55,6 +55,7 @@ class App extends Component {
       token: '',
       user: null
     })
+    this.props.history.push('/')
   }
 
   handleClick(e) {

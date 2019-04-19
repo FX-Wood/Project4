@@ -96,7 +96,8 @@ router.post('/login', (req, res) => {
                         expiresIn: "30 minutes"
                     })
                     // return the token
-                    res.json({ type: 'success', message: 'Login successful', user: user.toObject(), token })
+                    console.log('here is the login reply', JSON.stringify({ type: 'success', message: 'Login successful', user: user.safe, token }))
+                    res.json({ type: 'success', message: 'Login successful', user: user.safe, token })
                 } else {
                     res.status(401).json({ type: 'error', message: 'Incorrect password. Please try again' })
                 }
@@ -108,7 +109,7 @@ router.post('/login', (req, res) => {
 })
 // Route for token validation
 router.post('/me/from/token', ( req, res ) => {
-    console.log('POST /me/from/token', req.originalUrl, req.body)
+    console.log('POST /me/from/token', req.originalUrl, Object.keys(req.body))
     // make sure they sent us a token to check
     let token = req.body.token
     if ( !token ) {
@@ -116,20 +117,22 @@ router.post('/me/from/token', ( req, res ) => {
         res.json( { type: 'error', message: 'You must pass a valid token!' } )
     } else {
         // If token, verify it
-        JWT.verify( token, process.env.JWT_SECRET, (err, email) => {
+        JWT.verify( token, process.env.JWT_SECRET, (err, decodedToken) => {
+            console.log('JWT.verify', {err, decodedToken})
             if ( err ) {
                 // If invalid, return an error
                 res.json( { type: 'error', message: 'Invalid token. Please log in again'} )
             } else {
                 // If token is valid...
                 //   Look up the user in the db
-                User.findOne({ email }, (err, user) => {
+                User.findOne({ email: decodedToken.email }, (err, user) => {
                     //   If user doesn't exist, return an error
-                    if (err) {
-                        res.json( { type: 'error', message: 'Database error during validation' } )
+                    if (err || !user) {
+                        res.json( { type: 'error', message: "Couldn't find user" } )
                     } else {
                         //   If user exists, send user and token back to React
-                        res.json({ type: 'success', message: 'Valid token', user: user.toObject(), token})
+                        console.log('found user:', user)
+                        res.json({ type: 'success', message: 'Valid token', user: user.safe, token})
                     }
                 })
             }
