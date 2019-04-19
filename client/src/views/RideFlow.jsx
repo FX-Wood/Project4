@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
-
+import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
@@ -39,10 +39,10 @@ class RideFlow extends Component {
 
     handleSubmit = e => {
         console.log('submitting', this.state)
-        const data = this.state
-        axios.post('/ride', data)
+        axios.post('/ride', this.state)
         .then(res => {
             console.log('res', res)
+            this.props.history.push('/dash')
         })
         .catch(err => {
             console.log('err', err)
@@ -73,8 +73,10 @@ class RideFlow extends Component {
     render() {
         return (
             <MuiPickersUtilsProvider utils={DateFnsUtils} >
-            <Paper style={{minWidth: '400px', minHeight: '400px'}}></Paper>
                 <Grid container direction="column" alignItems="center" justify="center" spacing={24} style={{minHeight: '100vh'}}>
+                    <Grid item>
+                        <Typography variant="h3">Post a ride</Typography>
+                    </Grid>
                     <Grid item >
                             <FormControlLabel 
                                 control={
