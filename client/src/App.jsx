@@ -41,7 +41,7 @@ class App extends Component {
 
   liftTokenToState({token, user, message}, referringURL) {
     console.log('[App.jsx]: lifting token to state', { token, user, message }, { referringURL })
-    axios.defaults.headers.common['Authorization'] = `Bearer ${this.state.token}`
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     const path = referringURL || '/dash'
     this.props.enqueueSnackbar(JSON.stringify(message), {variant: 'success'})
     this.setState({token, user, message})
