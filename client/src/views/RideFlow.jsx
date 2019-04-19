@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { withSnackbar } from 'notistack';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
@@ -42,10 +42,12 @@ class RideFlow extends Component {
         axios.post('/ride', this.state)
         .then(res => {
             console.log('res', res)
+            this.props.enqueueSnackbar(JSON.stringify(res.data.message), {variant: 'success'})
             this.props.history.push('/dash')
         })
         .catch(err => {
             console.log('err', err)
+            this.props.enqueueSnackbar(JSON.stringify(err.response), {variant: 'error'})
         })
     }
 
@@ -174,4 +176,4 @@ class RideFlow extends Component {
     }
 }
 
-export default RideFlow
+export default withSnackbar(RideFlow);
