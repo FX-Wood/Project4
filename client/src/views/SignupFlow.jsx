@@ -6,14 +6,15 @@ import SignUpProfileForm from '../components/SignUpProfileForm';
 import Grid from '@material-ui/core/Grid';
 import Typeography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
+import { withSnackbar } from 'notistack';
 
 const styles = theme => ({
     signup: {
         display: 'flex',
         flexDirection: 'column',
         paddingTop: '24px',
-        maxWidth: 600,
-        margin: '0 auto'
+        alignItems: 'center',
+        JustifyContent: 'center',
     }
 })
 
@@ -65,24 +66,27 @@ class SignupFlow extends Component {
     async submitSignup(e) {
         console.log('signing up...')
         e.preventDefault()
-        const options = {headers: {'Content-Type':'multipart/form-data'}}
-        const signupData = new FormData();
-        for (let key in this.state) {
-            signupData.append(key, this.state[key])
-        }
-        const getBase64 = async (url, container) => {
-            let blob = await fetch(url).then(r => blob)
-            
-            let reader = new FileReader()
-            reader.addEventListener('load',((e) => {
-                container = e.target.results
+        const profilePicture = await ((url) => {
+            return axios.get(url)
+            .then(response => {
+                console.log(response)
+                return { type: response.headers["content-type"], data: response.data }
+                // return response.data
             })
-            reader.readAsBinaryString(url)
+        })(this.state.profilePicture)
+        const config = {
+            headers: { type: 'content-type: multi-part/form' }
         }
-        let image;
-        await getBase64(this.state.profilePicture, image)
-        signupData.append('profilePicture', image)
-        axios.post('/auth/signup', signupData, options)
+        const data = new FormData()
+        for (let key in this.state) {
+            if (key !== 'profilePicture'){
+                data.append(key, this.state[key])
+            }
+        }
+        const file = new File([profilePicture.data], 'profilePicture', { type: profilePicture.type})
+        console.log(file)
+        data.append('profilePicture', file)
+        axios.post('/auth/signup', data, config)
         .then( res => {
             console.log('res.data', res.data)
             if (res.data.type === 'error') {
@@ -95,7 +99,7 @@ class SignupFlow extends Component {
                 console.log('token', res.data.token)
                 localStorage.setItem('jwtToken', res.data.token)
                 this.props.liftToken(res.data)
-    
+                this.props.history.push('/dash')
             }
         }).catch(err => {
             console.log(err, err.response, err.status)
@@ -117,19 +121,19 @@ class SignupFlow extends Component {
             console.log(err)
             if (err.status === '429') message = `${err.response.status}: too many requests`
             // this.setState({ message })
-            this.props.liftMessage({ message })
+            this.props.enqueueSnackbar(message, {variant: 'error'})
+            this.props.liftMessage({ type: 'error', message })
         });
     }
     
     render() {
+        console.log('rendering signupFlow');
         const { classes } = this.props
-        const { first, last, email, password, profilePicture, skier, snowboarder, complicated, homeMountain } = this.state
-        
-        const initialFormProps = {
-            first,
-            last,
-            email,
-            password,
+        const initialProps = {
+            first: this.state.first,
+            last: this.state.last,
+            email: this.state.email,
+            password: this.state.password,
             handleChange: this.handleChange,
         }
 
@@ -146,17 +150,15 @@ class SignupFlow extends Component {
         }
         
         return (
-            <Grid className={classes.signup} >
-                <Grid container direction="row" justify="space-around" spacing={24}>
-                <Grid item xs={12}>
-                    <Typeography variant="h3">Sign Up</Typeography>
-                </Grid>
-                    <Route exact path="/signup" render={() => <SignUpInitialForm {...initialFormProps} /> } />
-                    <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileFormProps}  /> } />
+            <Grid className={classes.signup}>
+                <Typeography variant="h3">Sign Up</Typeography>
+                <Grid container direction="column" alignItems="center" justify="center" spacing={24} >
+                    <Route exact path="/signup" render={() => <SignUpInitialForm {...initialProps} /> } />
+                    <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileProps}  /> } />
                 </Grid>
             </Grid>
         )
     }
 }
 
-export default withStyles(styles)(SignupFlow)
+export default withSnackbar(withStyles(styles)(SignupFlow))

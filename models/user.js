@@ -3,12 +3,27 @@ const bcrypt = require('bcrypt');
 
 const Schema = mongoose.Schema;
 
+const profilePictureSchema = new Schema({
+    fieldname: String,
+    originalname: String,
+    encoding: String,
+    mimetype: String,
+    size: String,
+    buffer: Buffer,
+}, {
+    timestamps: true
+})
+
+mongoose.model('ProfilePicture', profilePictureSchema)
+
 const profileSchema = new Schema({
     first: String,
     last: String,
     skier: Boolean,
     snowboarder: Boolean,
-    profilePicture: String,
+    complicated: Boolean,
+    homeMountain: String,
+    profilePicture: profilePictureSchema,
 }, {
     timestamps: true
 })
@@ -56,7 +71,6 @@ userSchema.virtual('safe')
 userSchema.set('toObject', {
     transform: function(doc, ret, options) {
         let returnJson = {
-            _id: ret._id,
             email: ret.email
         }
         return returnJson;

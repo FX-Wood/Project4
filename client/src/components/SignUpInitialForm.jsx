@@ -13,7 +13,7 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
     }
     return (
         <>
-            <Grid item xs={12}>
+            <Grid item xs={12} md={6}>
                 <TextField
                     onChange={handleChange}
                     value={first}
@@ -24,7 +24,9 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
                     variant="outlined"
                     margin='normal'
                 />
-                <TextField 
+            </Grid>
+            <Grid item xs={12} md={6}>
+                <TextField
                     onChange={handleChange}
                     value={last}
                     type="text"
@@ -35,7 +37,7 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
                     margin='normal'
                 />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item >
                 <TextField
                     onChange={handleChange}
                     value={email}

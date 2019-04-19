@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Link, Route, Switch, Redirect } from 'react-router-dom';
+import { Link, Route, Switch, Redirect } from 'react-router-dom';
+import { withSnackbar } from 'notistack';
 
 // Pages
-import SignupFlow from './views/SignupFlow';
-import Login from './Login';
 import Splash from './views/Splash';
+import SignupFlow from './views/SignupFlow';
+import LoginFlow from './views/LoginFlow';
 import Dash from './views/Dash';
 
 // material UI
@@ -57,6 +58,8 @@ class App extends Component {
   liftMessageToState({ message }) {
     console.log('[App.jsx]: lifting error to state', { message })
     this.setState({ message })
+    this.props.enqueueSnackbar(message)
+
   }
 
   logout() {
@@ -116,8 +119,10 @@ class App extends Component {
           })
         }
         console.log(res)
+        this.props.history.push('/dash')
       }).catch( err => {
         console.log(err)
+        this.props.enqueueSnackbar(err, {type: 'error'})
       })
     }
   }
@@ -130,6 +135,7 @@ class App extends Component {
   render() {
     console.log(theme)
     let user = this.state.user
+
     const authProps = {
       toggleForm: this.handleButton,
       liftToken: this.liftTokenToState,
@@ -137,7 +143,6 @@ class App extends Component {
     }
     return (
       <MuiThemeProvider theme={theme}>
-        <Router>
           <CssBaseline />
           <Switch>
             <Route 
@@ -148,14 +153,13 @@ class App extends Component {
               render={() => <SignupFlow {...authProps} />} />
             <Route 
               exact path="/login" 
-              render={() => <Login {...authProps}/>} />
+              render={() => <LoginFlow {...authProps}/>} />
             <Route
               path="/dash" render={() => <Dash user={user} logout={this.logout} /> } />
           </Switch>
-        </Router>
       </MuiThemeProvider>
     )
   }
 }
 
-export default App;
+export default withSnackbar(App);

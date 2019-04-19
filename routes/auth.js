@@ -2,11 +2,37 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
 const JWT = require('jsonwebtoken');
+const fs = require('fs')
+const crypto = require('crypto')
+
+const cloudinary = require('cloudinary');
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+})
+
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const imageParser = multer({ storage });
+
+// profile schema
+// email: '',
+// password: '',
+// first: '',
+// last: '',
+// profilePicture: null,
+// skier: false,
+// snowboarder: false,
+// complicated: false,
+// homeMountain: ''
 
 // Route for signup
-router.post('/signup', (req, res, next) => {
+router.post('/signup', imageParser.single('profilePicture'), async (req, res) => {
+    console.log(req.file)
     console.log('POST /signup', req.body)
     // see if the email is already in the db
+    const { first, last, skier, snowboarder, complicated, homeMountain } = req.body
     User.findOne({email: req.body.email}, (err, user) => {
         console.log('POST /signup, {err, user}', {err, user} )
         // if db error, catch it 
@@ -26,7 +52,9 @@ router.post('/signup', (req, res, next) => {
                 email: req.body.email,
                 password: req.body.password,
             })
-            user.profile = {first: req.body.first, last: req.body.last}
+            user.profile = {first, last, skier, snowboarder, complicated, homeMountain}
+            user.profile.profilePicture = req.file
+            
             console.log('user instance', user)
             user.save((err, newUser) => {
                 console.log('done saving, here are the results', {err, newUser})
@@ -88,14 +116,14 @@ router.post('/me/from/token', ( req, res ) => {
         res.json( { type: 'error', message: 'You must pass a valid token!' } )
     } else {
         // If token, verify it
-        JWT.verify( token, process.env.JWT_SECRET, (err, user) => {
+        JWT.verify( token, process.env.JWT_SECRET, (err, email) => {
             if ( err ) {
                 // If invalid, return an error
                 res.json( { type: 'error', message: 'Invalid token. Please log in again'} )
             } else {
                 // If token is valid...
                 //   Look up the user in the db
-                User.findById(user._id, (err, user) => {
+                User.findOne({ email }, (err, user) => {
                     //   If user doesn't exist, return an error
                     if (err) {
                         res.json( { type: 'error', message: 'Database error during validation' } )
