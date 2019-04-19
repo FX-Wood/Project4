@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
-import { Link, Route, Switch, Redirect } from 'react-router-dom';
+import { withRouter, Link, Route, Switch, Redirect } from 'react-router-dom';
 import { withSnackbar } from 'notistack';
 
 // Pages
@@ -23,43 +23,26 @@ class App extends Component {
       user: null,
       message: '',
       lockedResult: '',
-      login: false,
-      signup: false
     }
-    this.handleButton = this.handleButton.bind(this)
     this.liftTokenToState = this.liftTokenToState.bind(this)
     this.liftMessageToState = this.liftMessageToState.bind(this)
     this.checkForLocalToken = this.checkForLocalToken.bind(this)
     this.logout = this.logout.bind(this)
     this.handleClick = this.handleClick.bind(this)
   }
-  handleButton(button) {
-    console.log('handling button ', button)
-    switch(button) {
-      case 'signup':
-        this.setState({
-            signup: true,
-            login: false
-        })
-        break;
-      case 'login':
-        this.setState({
-            login: true,
-            signup: false,
-        })
-        break;
-    }
-  }
 
-  liftTokenToState({token, user, message}) {
-    console.log('[App.jsx]: lifting token to state', {token, user, message})
+  liftTokenToState({token, user, message}, referringURL) {
+    console.log('[App.jsx]: lifting token to state', { token, user, message }, { referringURL })
+    const path = referringURL || '/dash'
+    this.props.enqueueSnackbar(JSON.stringify(message), {variant: 'success'})
     this.setState({token, user, message})
+    this.props.history.push(path)
   }
 
   liftMessageToState({ message }) {
     console.log('[App.jsx]: lifting error to state', { message })
+    this.props.enqueueSnackbar(JSON.stringify(message))
     this.setState({ message })
-    this.props.enqueueSnackbar(message)
 
   }
 
@@ -72,6 +55,7 @@ class App extends Component {
       token: '',
       user: null
     })
+    this.props.history.push('/')
   }
 
   handleClick(e) {
@@ -120,10 +104,11 @@ class App extends Component {
           })
         }
         console.log(res)
+        this.props.enqueueSnackbar('Login successful', {variant: 'success'})
         this.props.history.push('/dash')
       }).catch( err => {
         console.log(err)
-        this.props.enqueueSnackbar(err, {type: 'error'})
+        this.props.enqueueSnackbar(JSON.stringify(err), {variant: 'error'})
       })
     }
   }
@@ -139,7 +124,7 @@ class App extends Component {
 
     const authProps = {
       toggleForm: this.handleButton,
-      liftToken: this.liftTokenToState,
+      login: this.liftTokenToState,
       liftMessage: this.liftMessageToState
     }
     return (
@@ -156,11 +141,11 @@ class App extends Component {
               exact path="/login" 
               render={() => <LoginFlow {...authProps}/>} />
             <Route
-              path="/dash" render={() => <Dash user={user} logout={this.logout} /> } />
+              path="/dash" render={() => <Dash user={user} login={this.liftTokenToState} logout={this.logout} /> } />
           </Switch>
       </MuiThemeProvider>
     )
   }
 }
 
-export default withSnackbar(App);
+export default withRouter(withSnackbar(App));
