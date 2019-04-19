@@ -22,6 +22,17 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 
 
 const styles = theme => ({
+    card: {
+        maxWidth: '400px'
+    },
+    media: {
+        height: 0,
+        paddingTop: '56.25%', // 16:9
+      },
+    container: {
+        padding: '10%',
+        minHeight: '100vh'
+    }
 })
 
 class BrowseMountains extends Component {
@@ -56,22 +67,25 @@ class BrowseMountains extends Component {
     }
     render() {
         let content
+        const { classes } = this.props
         if (this.props.user) {
             content = (
-                <Grid container justify="center" alignContent="center" spacing={40}>
+                <Grid container justify="center" alignContent="center" spacing={40} className={classes.container}>
                     {
                         this.mountains.map((mtn, i) => {
                             const { name, image, website, twitter, weather } = mtn
                             console.log(image)
                             return (
                                 <Grid key={i} item xs={12} md={6} >
-                                    <Card>
+                                    <Card className={classes.card}>
                                     <CardContent>
-                                        <CardHeader>
-                                            <Typography>{name}</Typography>
-                                        </CardHeader>
+                                        <CardHeader
+                                            title={name}
+                                        />
                                         <CardMedia 
+                                            className={classes.media}
                                             src={image}
+
                                         />
                                         <CardActions>
                                             <IconButton component={ Link } to={website}>
