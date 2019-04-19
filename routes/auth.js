@@ -69,8 +69,8 @@ router.post('/signup', imageParser.single('profilePicture'), async (req, res) =>
                         expiresIn: 60 * 30
                     })
                     // return the token
-                    console.log('here is the reply', JSON.stringify({newUser: newUser.toObject(), token}))
-                    res.status(201).json({type: 'success', message: `Account creation successful. Welcome ${newUser.name}!`, user: newUser.toObject(), token})
+                    console.log('here is the reply', JSON.stringify({newUser: newUser.safe, token}))
+                    res.status(201).json({type: 'success', message: `Account creation successful. Welcome ${newUser.name}!`, user: newUser.safe, token})
                 }
             })
         }
@@ -131,7 +131,7 @@ router.post('/me/from/token', ( req, res ) => {
                         res.json( { type: 'error', message: "Couldn't find user" } )
                     } else {
                         //   If user exists, send user and token back to React
-                        console.log('found user:', user)
+                        console.log('found user:', user.safe)
                         res.json({ type: 'success', message: 'Valid token', user: user.safe, token})
                     }
                 })

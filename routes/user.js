@@ -5,7 +5,7 @@ router.route('/')
     // profile
     .get((req, res) => {
         console.log('GET /profile', req.originalUrl)
-        User.findOne({email:req.user.email}, 'safe', (error, user) => {
+        User.findOne({email:req.user.email}, 'safe', (err, user) => {
             if (err) {
                 res.status(500).json({ type: 'error', message:'there was an error retrieving your profile', data: null })
             } else {
