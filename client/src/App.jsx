@@ -3,6 +3,7 @@ import './App.css';
 import axios from 'axios';
 import { Link, Route, Switch, Redirect } from 'react-router-dom';
 import { withSnackbar } from 'notistack';
+import { withRouter } from 'react-router-dom';
 
 // Pages
 import Splash from './views/Splash';
@@ -163,4 +164,4 @@ class App extends Component {
   }
 }
 
-export default withSnackbar(App);
+export default withRouter(withSnackbar(App));

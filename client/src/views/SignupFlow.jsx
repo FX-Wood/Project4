@@ -152,8 +152,8 @@ class SignupFlow extends Component {
         
         return (
             <Grid className={classes.signup}>
-                <Typeography variant="h3">Sign Up</Typeography>
-                <Grid container direction="column" alignItems="center" justify="center" spacing={24} >
+                <Grid container direction="column" alignItems="center" justify="center" spacing={24} style={{minHeight: '100vh'}}>
+                    <Typeography variant="h3">Sign Up</Typeography>
                     <Route exact path="/signup" render={() => <SignUpInitialForm {...initialProps} /> } />
                     <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileProps}  /> } />
                 </Grid>
