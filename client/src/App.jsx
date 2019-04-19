@@ -3,13 +3,13 @@ import './App.css';
 import axios from 'axios';
 import { withRouter, Link, Route, Switch, Redirect } from 'react-router-dom';
 import { withSnackbar } from 'notistack';
-import { withRouter } from 'react-router-dom';
 
 // Pages
 import Splash from './views/Splash';
 import SignupFlow from './views/SignupFlow';
 import LoginFlow from './views/LoginFlow';
 import Dash from './views/Dash';
+import BrowseMountains from './views/BrowseMountains';
 
 // material UI
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -22,9 +22,11 @@ class App extends Component {
     this.state = {
       token: '',
       user: null,
+      mountains: [],
       message: '',
       lockedResult: '',
     }
+    this.addMountain = this.addMountain.bind(this)
     this.liftTokenToState = this.liftTokenToState.bind(this)
     this.liftMessageToState = this.liftMessageToState.bind(this)
     this.checkForLocalToken = this.checkForLocalToken.bind(this)
@@ -32,8 +34,13 @@ class App extends Component {
     this.handleClick = this.handleClick.bind(this)
   }
 
+  addMountain(mountain) {
+    this.setState({ mountain })
+  }
+
   liftTokenToState({token, user, message}, referringURL) {
     console.log('[App.jsx]: lifting token to state', { token, user, message }, { referringURL })
+    axios.defaults.headers.common['Authorization'] = `Bearer ${this.state.token}`
     const path = referringURL || '/dash'
     this.props.enqueueSnackbar(JSON.stringify(message), {variant: 'success'})
     this.setState({token, user, message})
@@ -92,12 +99,21 @@ class App extends Component {
           console.log('there was an older token sir, and it didn\'t check out', res.data)
           // if error, remove the bad token and display an error
           localStorage.removeItem('jwtToken')
+          this.props.enqueueSnackbar(JSON.stringify(res.data), {variant: 'error'})
+          // clear token from state as well
           this.setState({
-            errorMessage: res.data.message
+            token: '',
+            user: null
           })
         } else {
           // Upon receipt, store token 
           localStorage.setItem('jwtToken', res.data.token)
+          // append token to all axios headers
+          axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`
+          // show success message
+          this.props.enqueueSnackbar('Login successful', {variant: 'success'})
+          
+          this.props.history.push('/dash')
           // Put token in state
           this.setState({
             token: res.data.token,
@@ -105,8 +121,6 @@ class App extends Component {
           })
         }
         console.log(res)
-        this.props.enqueueSnackbar('Login successful', {variant: 'success'})
-        this.props.history.push('/dash')
       }).catch( err => {
         console.log(err)
         this.props.enqueueSnackbar(JSON.stringify(err), {variant: 'error'})
@@ -124,8 +138,8 @@ class App extends Component {
     let user = this.state.user
 
     const authProps = {
-      toggleForm: this.handleButton,
       login: this.liftTokenToState,
+      logout: this.logout,
       liftMessage: this.liftMessageToState
     }
     return (
@@ -143,6 +157,10 @@ class App extends Component {
               render={() => <LoginFlow {...authProps}/>} />
             <Route
               path="/dash" render={() => <Dash user={user} login={this.liftTokenToState} logout={this.logout} /> } />
+          <Route
+            exact path="/browse/mtn"
+            render={ ()=> <BrowseMountains user={user} addMountain={this.addMountain} {...authProps} />}
+          />
           </Switch>
       </MuiThemeProvider>
     )
