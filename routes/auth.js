@@ -116,14 +116,14 @@ router.post('/me/from/token', ( req, res ) => {
         res.json( { type: 'error', message: 'You must pass a valid token!' } )
     } else {
         // If token, verify it
-        JWT.verify( token, process.env.JWT_SECRET, (err, user) => {
+        JWT.verify( token, process.env.JWT_SECRET, (err, email) => {
             if ( err ) {
                 // If invalid, return an error
                 res.json( { type: 'error', message: 'Invalid token. Please log in again'} )
             } else {
                 // If token is valid...
                 //   Look up the user in the db
-                User.findById(user._id, (err, user) => {
+                User.findOne({ email }, (err, user) => {
                     //   If user doesn't exist, return an error
                     if (err) {
                         res.json( { type: 'error', message: 'Database error during validation' } )
