@@ -49,11 +49,11 @@ router.route('/')
             }
         })
     })
-
 router.route('/:id')
     .get((req, res) => {
         console.log('GET /ride/:id', req.originalUrl)
-        Ride.findById({ _id: req.params.id }, (err, ride) => {
+        console.log('req.params', req.params)
+        Ride.findById(req.params.id, (err, ride) => {
             if (err) {
                 console.log('ride deletion err', err)
                 res.status(404).json({type: 'error', message: 'There was an error getting your ride'})
@@ -70,13 +70,16 @@ router.route('/:id')
                 console.log('ride update err', err)
                 res.status(404).json({type: 'error', message: 'There was an error updating your ride'})
             } else {
+                console.log('found user')
                 const data = req.body
+                console.log(data)
                 Ride.findByIdAndUpdate({_id: req.params.id}, data, (err, updated) => {
                     if (err) {
                         console.log('ride update err', err)
                         res.status(404).json({type: 'error', message: 'There was an error updating your ride'})
                     } else {
-                        res.status(200).json({type: 'success', message: `updated`, data: null})
+                        console.log(updated)
+                        res.status(200).json({type: 'success', message: `updated ride ${req.params.id}`, data: null})
                     }
                 })
             }
@@ -100,5 +103,4 @@ router.route('/:id')
             }
         })
     })
-
 module.exports = router

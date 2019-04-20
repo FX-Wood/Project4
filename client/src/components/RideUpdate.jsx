@@ -14,17 +14,10 @@ import MomentUtils from '@date-io/moment';
 import DateFnsUtils from "@date-io/date-fns";
 import { DatePicker, TimePicker, MuiPickersUtilsProvider, } from "material-ui-pickers";
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
-// Table Ride {
-//     id [pk]
-//     user int [ref: - User.id]
-//     day date
-//     depart time
-//     arrive time
-//     note varchar
-//   }
 
-class RideFlow extends Component {
+class RideUpdate extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -36,20 +29,9 @@ class RideFlow extends Component {
             offer: 0,
         }
     }
-
     handleSubmit = e => {
-        const url = `/ride/${this.props.rideID}`
         console.log('submitting', this.state)
-        axios.post('/ride', this.state)
-        .then(res => {
-            console.log('res', res)
-            this.props.enqueueSnackbar(JSON.stringify(res.data.message), {variant: 'success'})
-            this.props.history.push('/dash')
-        })
-        .catch(err => {
-            console.log('err', err)
-            this.props.enqueueSnackbar(JSON.stringify(err.response), {variant: 'error'})
-        })
+        this.props.updateRide(this.props.rideID, this.state)
     }
 
     changeStart = date => {
@@ -72,40 +54,63 @@ class RideFlow extends Component {
             [e.target.name]: e.target.value
         })
     }
-    
+
+    getExistingRide = () => {
+        console.log('getting existing ride')
+        const url = `/ride/${this.props.rideID}`
+        axios.get(url)
+        .then(res => {
+            console.log('res', res)
+            const { start, startFlex, end, endFlex, note } = res.data.data
+            console.log('data', { start, startFlex, end, endFlex, note })
+            this.setState({ start, startFlex, end, endFlex, note })
+            this.props.enqueueSnackbar(`loaded ride number ${this.props.rideID}`, {variant: 'success'})
+        })
+        .catch(err => {
+            console.log('err', err)
+            this.props.enqueueSnackbar(JSON.stringify(err.response), {variant: 'error'})
+        })
+    }
+    componentDidMount() {
+        console.log('rideupdate didmount')
+        this.getExistingRide()
+    }
+
     render() {
-        const title = 'Post a ride'
-        const submit = this.handleSubmit
-        const buttonText = 'Post ride'
+        console.log('rideID', this.props.rideID)
+        const title = 'Update your ride';
+        const submit = this.handleSubmit;
+        const buttonText = 'Update ride';
         return (
             <MuiPickersUtilsProvider utils={DateFnsUtils} >
-                <Grid container direction="column" alignItems="center" justify="center" spacing={24} style={{minHeight: '100vh'}}>
+                <Grid container direction="column" alignItems="center" justify="center" spacing={24}>
+                    <Button onClick={this.getExistingRide}>Get ride data</Button>
                     <Grid item>
                         <Typography variant="h3">{title}</Typography>
                     </Grid>
                     <Grid item >
-                        <FormControlLabel 
-                            control={
-                                <Checkbox 
-                                    name="startFlex"
-                                    checked={this.state.startFlex} 
-                                    onChange={this.handleCheckbox} 
+                            <FormControlLabel 
+                                control={
+                                    <Checkbox 
+                                        name="startFlex"
+                                        checked={this.state.startFlex} 
+                                        onChange={this.handleCheckbox} 
+                                    />
+                                }
+                                label="flexible"
+                            />
+                            <DatePicker
+                                label="Pick the day"
+                                value={this.state.start}
+                                onChange={this.changeStart}
+                                variant="outlined"
                                 />
-                            }
-                            label="flexible"
-                        />
-                        <DatePicker
-                            label="Pick the day"
-                            value={this.state.start}
-                            onChange={this.changeStart}
-                            variant="outlined"
-                        />
-                        <TimePicker
-                            label="pick time to leave"
-                            value={this.state.start}
-                            onChange={this.changeStart}
-                            variant="outlined"
-                        />
+                            <TimePicker
+                                label="pick time to leave"
+                                value={this.state.start}
+                                onChange={this.changeStart}
+                                variant="outlined"
+                                />
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <FormControlLabel 
@@ -139,7 +144,7 @@ class RideFlow extends Component {
                         />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Button variant="contained" color="primary" onClick={submit}>{buttonText}</Button>
+                        <Button variant="contained" color="primary" onClick={this.handleSubmit}>{buttonText}</Button>
                     </Grid>
                 </Grid>
             </MuiPickersUtilsProvider>
@@ -147,4 +152,4 @@ class RideFlow extends Component {
     }
 }
 
-export default withSnackbar(RideFlow);
+export default withRouter(withSnackbar(RideUpdate));

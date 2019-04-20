@@ -10,10 +10,16 @@ import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+import RideUpdate from '../components/RideUpdate';
+
 const styles = theme => ({
     root: {
         maxWidth: '80%',
         justifySelf: 'flexEnd',
+    },
+    flexibleIndicator: {
+        color: theme.palette.secondary.main
     }
 })
 
@@ -39,19 +45,20 @@ class RidesIndex extends Component {
             this.props.enqueueSnackbar(JSON.stringify(err.response), {variant: 'error'})
         })
     }
+
     goToEditRide = (rideID) => {
         console.log('going to edit ride', rideID)
         this.props.history.push('/dash/ride/' + rideID)
     }
-    updateRide = (rideID, formData) => {
-        console.log('editRide', rideID, formData)
+
+    updateRide = (rideID, data) => {
         const url = `/ride/${rideID}`
-        axios.put(url)
+        axios.put(url, data)
         .then(res => {
             console.log('res', res)
-            this.getRides()
-            this.props.history.push('/dash')
             this.props.enqueueSnackbar(JSON.stringify(res.data.message), {variant: 'success'})
+            this.props.history.push('/dash')
+            this.getRides()
         })
         .catch(err => {
             console.log('err', err)
@@ -81,42 +88,50 @@ class RidesIndex extends Component {
 
     render() {
         const { classes } = this.props
-
-        const content = this.state.rides.map((ride, i) => {
-            const browserUrl = `dash/ride/${ride.start}`
+        
+        const rides = this.state.rides.map((ride, i) => {
             const start = new Date(ride.start)
             const end = new Date(ride.end)
+            const { startFlex, endFlex } = ride
             console.log('start', start)
             console.log('end', end)
-
+            console.log({startFlex, endFlex})
             return (
-                <Grid item container key={i} className="ride"  >
-                    <Grid item container direction="row" spacing={40} style={{margin: ""}}>
-                        <Grid item>
-                        <Typography variant="body1">Need a ride! {ride.note}</Typography>
+                <Grid key={i} item>
+                    <Card style={{padding: '2em'}}>
+                        <Grid item><Typography variant="body1">{ride.note}</Typography></Grid>
+                        <Grid item container spacing={24}>
+                            <Grid item><Typography variant="body1">Date: {start.toLocaleDateString()}</Typography></Grid>
+                            <Grid item>
+                                <Typography variant="body1">
+                                    Start of day: {start.toLocaleTimeString()}
+                                    { startFlex && <span className={ classes.flexibleIndicator }> Flexible</span>}
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography variant="body1">
+                                    End of day: {end.toLocaleTimeString()}
+                                    { endFlex && <span className={ classes.flexibleIndicator } > Flexible</span>} 
+                                </Typography>
+                            </Grid>
+                            <Grid item><Button onClick={() => this.goToEditRide(ride._id)}><EditIcon/></Button></Grid>
+                            <Grid item><Button onClick={() => this.deleteRide(ride._id)}><CloseIcon /></Button></Grid>
                         </Grid>
-                        <Grid item container spacing={40}>
-                                <Grid item><Typography variant="h5">{}</Typography></Grid>
-                                <Grid item><Typography variant="body2">Date: {start.toLocaleDateString()}</Typography></Grid>
-                                <Grid item><Typography variant="body2">Start of day: {start.toLocaleTimeString()}</Typography></Grid>
-                                <Grid item><Typography variant="body1">End of day: {end.getHours()} : {end.getMinutes()}</Typography></Grid>
-                                <Grid item><Typography variant="body1">{ride.note}</Typography></Grid>
-                                <Grid><Button onClick={() => this.goToEditRide(ride._id)}><EditIcon/></Button></Grid>
-                                <Grid><Button onClick={() => this.deleteRide(ride._id)}><CloseIcon /></Button></Grid>
-                        </Grid>
-                    </Grid>
+                    </Card>
                 </Grid>
                 )
         })
         const routes = this.state.rides.map((ride, i) => {
             const url = `/dash/ride/${ride._id}`
             return (
-                <Route path={url}
+                <Route 
+                    path={url}
                     render={() => {
                         return (
-                            <RideFlow rideID={ride._id} ride={ride} delete={this.deleteRide} updateRide={this.updateRide} />
+                            <RideUpdate rideID={ride._id} updateRide={this.updateRide}/>
                         )
                     }} 
+                    key={i}
                 />
             )
         })
@@ -126,8 +141,8 @@ class RidesIndex extends Component {
                 <Grid item>
                     {routes}
                 </Grid>
-                <Grid item>
-                    {content}
+                <Grid item container spacing={24}>
+                    {rides}
                 </Grid>
             </Grid>  
         )
