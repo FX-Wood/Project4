@@ -169,6 +169,7 @@ class App extends Component {
               exact path="/ride/new"
               component={RideFlow}
             />
+            
           </Switch>
       </MuiThemeProvider>
     )

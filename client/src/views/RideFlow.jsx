@@ -72,12 +72,39 @@ class RideFlow extends Component {
         })
     }
 
+    getExistingRide = (rideID) => {
+        console.log('getting next ride')
+        const url = `/ride/${rideID}`
+        axios.get(url)
+        .then(res => {
+            console.log('res', res)
+            const { start, startFlex, end, endFlex, note } = res.data
+            this.setState({ start, startFlex, end, endFlex, note })
+            this.props.enqueueSnackbar(JSON.stringify(res.data.message), {variant: 'success'})
+            
+        })
+        .catch(err => {
+            console.log('err', err)
+            this.props.enqueueSnackbar(JSON.stringify(err.response), {variant: 'error'})
+        })
+    } 
+    componentDidMount() {
+        if (this.props.rideID) {
+            this.getExistingRide(this.props.rideID)
+        }
+    }
     render() {
+        const existing = this.props.rideID ? true : false;
+        console.log(existing)
+        const title = existing ? 'Update your ride' : 'Post a ride';
+        const submit = existing ? () => this.props.updateRide(this.props.rideID, this.state) : this.handleSubmit ;
+        const buttonText = existing? 'Update ride' : 'Post Ride'
+        console.log({title, submit})
         return (
             <MuiPickersUtilsProvider utils={DateFnsUtils} >
                 <Grid container direction="column" alignItems="center" justify="center" spacing={24} style={{minHeight: '100vh'}}>
                     <Grid item>
-                        <Typography variant="h3">Post a ride</Typography>
+                        <Typography variant="h3">{title}</Typography>
                     </Grid>
                     <Grid item >
                             <FormControlLabel 
@@ -135,7 +162,7 @@ class RideFlow extends Component {
                         />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Button variant="contained" color="primary" onClick={this.handleSubmit}>Post ride request</Button>
+                        <Button variant="contained" color="primary" onClick={submit}>{buttonText}</Button>
                     </Grid>
                     {/* <Grid item xs={12} md={6}>
                         <TextField

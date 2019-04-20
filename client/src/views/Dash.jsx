@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import ReAuthorize from '../components/ReAuthorize';
 import { withSnackbar } from 'notistack';
 import { Link } from 'react-router-dom';
+import RidesIndex from '../components/RidesIndex';
 
 // material ui
 import Grid from '@material-ui/core/Grid';
@@ -44,22 +45,25 @@ class Dash extends Component {
             const { first, last, snowboarder, skier, profilePicture } = this.props.user.profile
             console.log(profilePicture)
                 content = (
-                    <Grid container direction='column' justify="center" alignItems="center" spacing={24} style={{minHeight: '100vh'}}>
+                    <Grid container direction='row' justify="center" alignItems="center" spacing={24} style={{minHeight: '100vh'}}>
                         <Grid item>
                             <Typography variant="h3">Dashboard</Typography>
                             <Typography variant="subtitle1">{ first + ' ' + last }</Typography>
                         </Grid>
-                        <Grid item>
+                        {/* <Grid item>
                             <img src={ URL.createObjectURL(new File([profilePicture.buffer], 'profilePicture', {type: profilePicture.mimetype}))} alt="user avatar"/>
-                        </Grid>
-                        <Grid item>
-                            <Button onClick={this.props.logout} variant="contained" color="primary" >Logout</Button>
-                        </Grid>
+                        </Grid> */}
                         <Grid item>
                             <Button component={Link} to={'/browse/mtn'}  variant="contained" color="primary">Browse mountains</Button>
                         </Grid>
                         <Grid item>
                             <Button component={Link} to={'/ride/new'}  variant="contained" color="primary">Get a ride</Button>
+                        </Grid>
+                        <Grid item>
+                            <Button onClick={this.props.logout} variant="contained" color="primary" >Logout</Button>
+                        </Grid>
+                        <Grid item xs={12} >
+                            <RidesIndex />
                         </Grid>
                     </Grid>
                 )
