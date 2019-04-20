@@ -38,7 +38,7 @@ class RideFlow extends Component {
     }
 
     handleSubmit = e => {
-        const url = `/ride/${this.props.rideID}`
+        const url = `api/ride/${this.props.rideID}`
         console.log('submitting', this.state)
         axios.post('/ride', this.state)
         .then(res => {

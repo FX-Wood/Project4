@@ -28,7 +28,7 @@ export default class Login extends Component {
     handleSubmit(e) {
         console.log('Logging in...')
         e.preventDefault()
-        axios.post('/auth/login', {
+        axios.post('api/auth/login', {
             email: this.state.email,
             password: this.state.password
         }).then( res => {

@@ -67,21 +67,6 @@ class App extends Component {
     this.props.history.push('/')
   }
 
-  handleClick(e) {
-    console.log('[App.jsx]: handleClick(), event', {e})
-    console.log('[App.jsx]: handleClick(), this.state', this.state)
-    e.preventDefault()
-    axios.defaults.headers.common['Authorization'] = `Bearer ${this.state.token}`
-    axios.get('/locked/test').then( res => {
-      console.log('this is the locked response', res)
-      this.setState({
-        lockedResult: res.data.message
-      })
-    }).catch(err => {
-      console.log('err')
-    })
-  }
-
   checkForLocalToken(destinationUrl) {
     console.log('[App.jsx]: checkForLocalToken(), localStorage["jwtToken"]', localStorage["jwtToken"])
     const currentLocation = this.props.history.location
@@ -97,7 +82,7 @@ class App extends Component {
       })
     } else {
       // If found, send token to be verified
-      axios.post('/auth/me/from/token',{token})
+      axios.post('api/auth/me/from/token',{token})
       .then( res => {
         if (res.data.type === 'error') {
           console.log('there was an older token sir, and it didn\'t check out', res.data)

@@ -5,6 +5,7 @@ const expressJWT = require('express-jwt');
 const RateLimit = require('express-rate-limit');
 
 const app = express();
+app.use(express.static(__dirname + '/client/build'));
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
@@ -32,12 +33,13 @@ db.on('error', (err) => {
     console.log(`Database error:\n${err}`)
 })
 
-app.use('/auth/login', loginLimiter);
-app.use('/auth/signup', signupLimiter);
 
-app.use('/auth', require('./routes/auth'))
-app.use('/user', expressJWT({ secret: process.env.JWT_SECRET }), require('./routes/user'))
-app.use('/ride', expressJWT({ secret: process.env.JWT_SECRET }), require('./routes/ride'))
+app.use('api/auth/login', loginLimiter);
+app.use('api/auth/signup', signupLimiter);
+
+app.use('api/auth', require('./routes/auth'))
+app.use('api/user', expressJWT({ secret: process.env.JWT_SECRET }), require('./routes/user'))
+app.use('api/ride', expressJWT({ secret: process.env.JWT_SECRET }), require('./routes/ride'))
 
 app.listen(process.env.PORT, () => {
     console.log(`You're listening to the sweet sounds of ${process.env.PORT} project4 in the morning...`)
