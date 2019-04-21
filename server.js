@@ -47,7 +47,7 @@ app.use('/api/ride', expressJWT({ secret: process.env.JWT_SECRET }), require('./
 
 app.get('*', (err, res) => {
     console.log('GET *')
-    res.send(__dirname + '/client/build')
+    res.send(__dirname + '/client/build/index.html')
 })
 app.listen(process.env.PORT, () => {
     console.log(`You're listening to the sweet sounds of ${process.env.PORT} project4 in the morning...`)

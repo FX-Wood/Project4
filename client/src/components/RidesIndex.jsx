@@ -32,7 +32,7 @@ class RidesIndex extends Component {
     }
 
     getRides = () => {
-        axios.get('api/ride')
+        axios.get('/api/ride')
         .then(res => {
             console.log('res', res)
             this.setState({
@@ -52,7 +52,7 @@ class RidesIndex extends Component {
     }
 
     updateRide = (rideID, data) => {
-        const url = `api/ride/${rideID}`
+        const url = `/api/ride/${rideID}`
         axios.put(url, data)
         .then(res => {
             console.log('res', res)
