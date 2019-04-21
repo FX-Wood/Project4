@@ -86,7 +86,7 @@ class SignupFlow extends Component {
         const file = new File([profilePicture.data], 'profilePicture', { type: profilePicture.type})
         console.log(file)
         data.append('profilePicture', file)
-        axios.post('api/auth/signup', data, config)
+        axios.post('/api/auth/signup', data, config)
         .then( res => {
             console.log('res.data', res.data)
             if (res.data.type === 'error') {

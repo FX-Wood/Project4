@@ -30,7 +30,7 @@ class Dash extends Component {
     getProfile() {
         if (this.props.user) {
             console.log(axios.defaults.headers)
-            axios.get('api/user').then(res => {
+            axios.get('/api/user').then(res => {
                 console.log('GET /user', res.data)
                 this.setState(res.data)
             }).catch(err => {

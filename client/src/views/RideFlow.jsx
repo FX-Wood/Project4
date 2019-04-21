@@ -40,7 +40,7 @@ class RideFlow extends Component {
     handleSubmit = e => {
         const url = `api/ride/${this.props.rideID}`
         console.log('submitting', this.state)
-        axios.post('/ride', this.state)
+        axios.post('/api/ride', this.state)
         .then(res => {
             console.log('res', res)
             this.props.enqueueSnackbar(JSON.stringify(res.data.message), {variant: 'success'})

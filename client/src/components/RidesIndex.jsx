@@ -68,7 +68,7 @@ class RidesIndex extends Component {
 
     deleteRide = (rideID) => {
         console.log('deleteRide',rideID )
-        const url = `api/ride/${rideID}`
+        const url = `/api/ride/${rideID}`
         axios.delete(url)
         .then(res => {
             console.log('res', res)

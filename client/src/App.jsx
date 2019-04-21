@@ -32,7 +32,6 @@ class App extends Component {
     this.liftMessageToState = this.liftMessageToState.bind(this)
     this.checkForLocalToken = this.checkForLocalToken.bind(this)
     this.logout = this.logout.bind(this)
-    this.handleClick = this.handleClick.bind(this)
   }
 
   addMountain(mountain) {
