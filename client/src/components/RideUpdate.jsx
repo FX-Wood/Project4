@@ -57,7 +57,7 @@ class RideUpdate extends Component {
 
     getExistingRide = () => {
         console.log('getting existing ride')
-        const url = `api/ride/${this.props.rideID}`
+        const url = `/api/ride/${this.props.rideID}`
         axios.get(url)
         .then(res => {
             console.log('res', res)
