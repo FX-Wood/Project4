@@ -23,33 +23,63 @@ const styles = theme => ({
     }
 })
 
-class RidesIndex extends Component {
+class RideShow extends Component {
     constructor(props) {
         super(props)
         this.state = {
             rides: [],
+            users: [],
             phoneNumber: '',
         }
     }
 
     getRides = () => {
-        axios.get('/api/share')
+        return axios.get('/api/share')
         .then(res => {
             console.log('res', res)
-            this.setState({
-                rides: res.data.data,
-            })
             this.props.enqueueSnackbar(JSON.stringify(res.data.message), {variant: 'success'})
+            return res.data.data
         })
         .catch(err => {
             console.log('err', err)
             this.props.enqueueSnackbar(JSON.stringify(err.response), {variant: 'error'})
         })
     }
+    getUsers = () => {
+        return axios.get('/api/share/users')
+        .then(res => {
+            console.log('res', res)
+            this.props.enqueueSnackbar(JSON.stringify(res.data.message), {variant: 'success'})
+            return res.data.data
+        })
+        .catch(err => {
+            console.log('err', err)
+            this.props.enqueueSnackbar(JSON.stringify(err.response), {variant: 'error'})
+        })
+    }
+    joinRides = async () => {
+        let ridesRaw = await this.getRides()
+        console.log('got rides', ridesRaw)
+        const usersRaw = await this.getUsers()
+        console.log('got users', usersRaw)
+
+        ridesRaw.forEach(ride => {
+            const doc = usersRaw.find(user => {
+                console.log('ids', user.id, ride.user)
+                return user.id == ride.user
+            })
+            console.log(doc)
+            ride.user = doc
+        })
+        console.log(ridesRaw)
+        this.setState({
+            rides: ridesRaw
+        })
+    }
 
     componentDidMount() {
         console.log('rides index did mount')
-        this.getRides()
+        this.joinRides()
     }
 
     render() {
@@ -67,6 +97,7 @@ class RidesIndex extends Component {
                     <Card style={{padding: '2em'}}>
                         <Grid item><Typography variant="body1">{ride.note}</Typography></Grid>
                         <Grid item container spacing={24}>
+                        <Grid item><Typography variant="body1">Name: {ride.user.profile.first + ' ' + ride.user.profile.last}</Typography></Grid>
                             <Grid item><Typography variant="body1">Date: {start.toLocaleDateString()}</Typography></Grid>
                             <Grid item>
                                 <Typography variant="body1">
@@ -107,6 +138,7 @@ class RidesIndex extends Component {
 
         return (
             <Grid container style={{padding: '80px'}} alignContent="center" justify="center" className={classes.root} spacing={40}>
+                <Typography variant="h3">Folks that need a ride</Typography>
                 {/* <Grid item>
                     {routes}
                 </Grid> */}
@@ -119,4 +151,4 @@ class RidesIndex extends Component {
 }
 
 
-export default withRouter(withStyles(styles)(withSnackbar(RidesIndex)))
+export default withRouter(withStyles(styles)(withSnackbar(RideShow)))
