@@ -4,7 +4,8 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 
-const SignUpInitialForm = ({ handleChange, first, last, email, password, history }) => {
+const SignUpInitialForm = (props) => {
+    const { handleChange, first, last, phoneNumber, email, password, history } = props
     const done = (e) => {
         console.log('done')
         e.preventDefault()
@@ -35,6 +36,17 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
                     variant="outlined"
                 />
             </Grid>
+            <Grid item xs={12} md={6}>
+                <TextField
+                    onChange={handleChange}
+                    value={phoneNumber}
+                    type="text"
+                    name="phoneNumber"
+                    label="Phone Number"
+                    placeholder="For drivers to contact you"
+                    variant="outlined"
+                />
+            </Grid>
             <Grid item >
                 <TextField
                     onChange={handleChange}
@@ -57,6 +69,7 @@ const SignUpInitialForm = ({ handleChange, first, last, email, password, history
                     variant="outlined"
                 />
             </Grid>
+
             <Grid item>
                 <Button component={Link} to="/" variant="contained" color="primary">Back</Button>
                 <Button component={Link} to="/signup/profile" variant="contained" color="primary">Next</Button>

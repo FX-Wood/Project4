@@ -32,7 +32,7 @@ router.post('/signup', imageParser.single('profilePicture'), async (req, res) =>
     console.log(req.file)
     console.log('POST /signup', req.body)
     // see if the email is already in the db
-    const { first, last, skier, snowboarder, complicated, homeMountain } = req.body
+    const { first, last, skier, phoneNumber, snowboarder, complicated, homeMountain } = req.body
     User.findOne({email: req.body.email}, (err, user) => {
         console.log('POST /signup, {err, user}', {err, user} )
         // if db error, catch it 
@@ -52,7 +52,7 @@ router.post('/signup', imageParser.single('profilePicture'), async (req, res) =>
                 email: req.body.email,
                 password: req.body.password,
             })
-            user.profile = {first, last, skier, snowboarder, complicated, homeMountain}
+            user.profile = {first, last, skier, phoneNumber, snowboarder, complicated, homeMountain}
             user.profile.profilePicture = req.file
             
             console.log('user instance', user)

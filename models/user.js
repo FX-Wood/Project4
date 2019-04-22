@@ -23,6 +23,7 @@ const profileSchema = new Schema({
     snowboarder: Boolean,
     complicated: Boolean,
     homeMountain: String,
+    phoneNumber: String,
     profilePicture: profilePictureSchema,
 }, {
     timestamps: true

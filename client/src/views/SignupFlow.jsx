@@ -30,6 +30,7 @@ class SignupFlow extends Component {
             skier: false,
             snowboarder: false,
             complicated: false,
+            phoneNumber: '',
             homeMountain: ''
         }
         this.handleCheckbox = this.handleCheckbox.bind(this)
@@ -72,6 +73,9 @@ class SignupFlow extends Component {
                 console.log(response)
                 return { type: response.headers["content-type"], data: response.data }
                 // return response.data
+            }).catch(err => {
+                console.log(err)
+                this.props.enqueueSnackbar('There was an error uploading your photo -- please try a different one.', { variant: "error" })
             })
         })(this.state.profilePicture)
         const config = {
@@ -131,6 +135,7 @@ class SignupFlow extends Component {
         const initialProps = {
             first: this.state.first,
             last: this.state.last,
+            phoneNumber: this.state.phoneNumber,
             email: this.state.email,
             password: this.state.password,
             handleChange: this.handleChange,
