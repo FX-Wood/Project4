@@ -57,6 +57,9 @@ class Dash extends Component {
                             <Button component={Link} to={'/browse/mtn'}  variant="contained" color="primary">Browse mountains</Button>
                         </Grid>
                         <Grid item>
+                            <Button component={Link} to={'/browse/rides'}  variant="contained" color="primary">Browse rides</Button>
+                        </Grid>
+                        <Grid item>
                             <Button component={Link} to={'/ride/new'}  variant="contained" color="primary">Get a ride</Button>
                         </Grid>
                         <Grid item>

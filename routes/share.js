@@ -4,7 +4,7 @@ const User = require('../models/user');
 
 router.get('/', (req, res) => {
     console.log('GET /share')
-    Ride.find().populate({ path: 'user', select: 'safe' }).exec((err, rides) => {
+    Ride.find().populate({ path: 'user', select: 'safe' }).populate({path: 'mountain'}).exec((err, rides) => {
         if (err) {
             console.log('error finding rides')
             res.status(500).json({type: 'error', message: 'error finding rides'})

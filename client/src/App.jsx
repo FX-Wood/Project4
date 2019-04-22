@@ -11,6 +11,7 @@ import LoginFlow from './views/LoginFlow';
 import Dash from './views/Dash';
 import BrowseMountains from './views/BrowseMountains';
 import RideFlow from './views/RideFlow';
+import RideShow from './views/RideShow';
 
 // material UI
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -153,7 +154,11 @@ class App extends Component {
               exact path="/ride/new"
               component={RideFlow}
             />
-            
+            <Route
+              exact path="/browse/rides"
+              render={ () => <RideShow user={user} />}
+            />
+
           </Switch>
       </MuiThemeProvider>
     )
