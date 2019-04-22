@@ -82,9 +82,11 @@ class BrowseMountains extends Component {
                                             {mtn.sizzle}
                                         </Typography>
                                         <CardActions>
-                                            <IconButton component={ Link } to={website}>
-                                                <ShareIcon />
-                                            </IconButton>
+                                            <a href={website} target="_blank">
+                                                <IconButton>
+                                                    <ShareIcon />
+                                                </IconButton>
+                                            </a>
                                             <IconButton onClick={() => this.props.addMountain(name)}>
                                                 <FavoriteIcon />
                                             </IconButton>
