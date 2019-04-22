@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import RideUpdate from '../components/RideUpdate';
+import moment from 'moment';
 
 const styles = theme => ({
     root: {
@@ -87,7 +88,9 @@ class RideShow extends Component {
         
         const rides = this.state.rides.map((ride, i) => {
             const start = new Date(ride.start)
+            const mStart = moment(start)
             const end = new Date(ride.end)
+            const mEnd = moment(end)
             const { startFlex, endFlex } = ride
             console.log('start', start)
             console.log('end', end)
@@ -95,25 +98,28 @@ class RideShow extends Component {
             return (
                 <Grid key={i} item>
                     <Card style={{padding: '2em'}}>
+                        <Grid container spacing={24} alignItems="baseline">
+                            <Grid item><Typography variant="h6">{String(mStart.format('D / MMMM'))}</Typography></Grid>
+                            <Grid item><Typography variant="h6" color="textSecondary">{ride.mountain.name}</Typography></Grid>
+                            <Grid item><Typography variant="body1">Name: {ride.user.profile.first + ' ' + ride.user.profile.last}</Typography></Grid>
+                        </Grid>
                         <Grid item><Typography variant="body1">{ride.note}</Typography></Grid>
                         <Grid item container spacing={24}>
-                        <Grid item><Typography variant="body1">Name: {ride.user.profile.first + ' ' + ride.user.profile.last}</Typography></Grid>
-                            <Grid item><Typography variant="body1">Date: {start.toLocaleDateString()}</Typography></Grid>
                             <Grid item>
                                 <Typography variant="body1">
-                                    Start of day: {start.toLocaleTimeString()}
+                                    Start of day: {mStart.format('h:mm a')}
                                     { startFlex && <span className={ classes.flexibleIndicator }> Flexible</span>}
                                 </Typography>
                             </Grid>
                             <Grid item>
                                 <Typography variant="body1">
-                                    End of day: {end.toLocaleTimeString()}
+                                    End of day: {mEnd.format('h:mm a')}
                                     { endFlex && <span className={ classes.flexibleIndicator } > Flexible</span>} 
                                 </Typography>
                             </Grid>
                             <Grid item>
                                 <Typography variant="body1">
-                                    Contact phone: {this.state.phoneNumber}
+                                    Contact phone: {ride.user.profile.phoneNumber}
                                 </Typography>
                             </Grid>
                         </Grid>
