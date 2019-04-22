@@ -27,7 +27,8 @@ class RidesIndex extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            rides: []
+            rides: [],
+            phoneNumber: '',
         }
     }
 
@@ -36,7 +37,8 @@ class RidesIndex extends Component {
         .then(res => {
             console.log('res', res)
             this.setState({
-                rides: res.data.data
+                rides: res.data.data.rides,
+                phoneNumber: res.data.data.phoneNumber
             })
             this.props.enqueueSnackbar(JSON.stringify(res.data.message), {variant: 'success'})
         })
@@ -112,6 +114,11 @@ class RidesIndex extends Component {
                                 <Typography variant="body1">
                                     End of day: {end.toLocaleTimeString()}
                                     { endFlex && <span className={ classes.flexibleIndicator } > Flexible</span>} 
+                                </Typography>
+                            </Grid>
+                            <Grid item>
+                                <Typography variant="body1">
+                                    Contact phone: {this.state.phoneNumber}
                                 </Typography>
                             </Grid>
                             <Grid item><Button onClick={() => this.goToEditRide(ride._id)}><EditIcon/></Button></Grid>

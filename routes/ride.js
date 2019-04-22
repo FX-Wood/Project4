@@ -17,7 +17,7 @@ router.route('/')
                         res.status(404).json({type: 'error', message: 'There was an error checking your rides'})
                     } else {
                         console.log('found rides', rides)
-                        res.status(200).json({type: 'success', message: `Found your open rides`, data: rides})
+                        res.status(200).json({type: 'success', message: `Found your open rides`, data: { rides, phoneNumber: user.profile.phoneNumber }})
                     }
                 })
             }
