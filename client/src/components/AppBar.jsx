@@ -24,7 +24,27 @@ const styles = {
 };
 
 function ButtonAppBar(props) {
-  const { classes } = props;
+    const { classes } = props;
+    let buttons;
+    if (props.user) {
+        buttons = (
+            <>
+                <Button variant="contained" className={classes.menuButton} component={Link} to={'/browse/mtn'}  color="primary">Browse mountains</Button>
+                <Button variant="contained" className={classes.menuButton} component={Link} to={'/browse/rides'}  color="primary">Browse rides</Button>
+                <Button variant="contained" className={classes.menuButton} component={Link} to={'/ride/new'}  color="primary">Get a ride</Button>
+                <Button variant="contained" className={classes.menuButton} onClick={props.logout} color="primary" >Logout</Button>
+            </>
+        )
+    } else {
+        buttons = (
+            <>
+            <Button component={Link} to="/login" variant="contained" color="primary">Login</Button>
+            <Button component={Link} to="/signup" variant="contained" color="primary">Signup</Button>
+            </>
+        )
+    }
+
+
   return (
     <div className={classes.root}>
         <AppBar position="static">
@@ -32,10 +52,7 @@ function ButtonAppBar(props) {
             <Typography variant="h6" color="inherit" className={classes.grow}>
                 RideShare
             </Typography>
-            <Button variant="contained" className={classes.menuButton} component={Link} to={'/browse/mtn'}  color="primary">Browse mountains</Button>
-            <Button variant="contained" className={classes.menuButton} component={Link} to={'/browse/rides'}  color="primary">Browse rides</Button>
-            <Button variant="contained" className={classes.menuButton} component={Link} to={'/ride/new'}  color="primary">Get a ride</Button>
-            <Button variant="contained" className={classes.menuButton} onClick={props.logout} color="primary" >Logout</Button>
+            {buttons}
         </Toolbar>
       </AppBar>
     </div>

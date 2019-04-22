@@ -164,12 +164,24 @@ class App extends Component {
             </Switch>
       )
     } else {
-        content = <Splash />
+        content = (
+          <>
+          <Route 
+            exact path='/'
+            render={() => <Splash user={user} />} />
+          <Route 
+            path="/signup" 
+            render={() => <SignupFlow {...authProps} />} />
+          <Route 
+            path="/login" 
+            render={() => <LoginFlow {...authProps}/>} />
+          </>
+          )
     }
     return (
       <MuiThemeProvider theme={theme}>
           <CssBaseline />
-          <AppBar user={user} logout={this.props.logout} />
+          <AppBar user={user} logout={this.logout} />
           {content}
       </MuiThemeProvider>
     )
