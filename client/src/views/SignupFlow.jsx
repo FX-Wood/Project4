@@ -67,17 +67,32 @@ class SignupFlow extends Component {
     async submitSignup(e) {
         console.log('signing up...')
         e.preventDefault()
-        const profilePicture = await ((url) => {
-            return axios.get(url)
-            .then(response => {
-                console.log(response)
-                return { type: response.headers["content-type"], data: response.data }
-                // return response.data
-            }).catch(err => {
-                console.log(err)
-                this.props.enqueueSnackbar('There was an error uploading your photo -- please try a different one.', { variant: "error" })
-            })
-        })(this.state.profilePicture)
+        if (!this.state.profilePicture) {
+            return this.props.enqueueSnackbar('Please include a photo!', { variant: "error" })
+        }
+        if (!this.state.email) {
+            return this.props.enqueueSnackbar('Please include an email address!', { variant: "error" })
+        }
+        let profilePicture
+        let file
+        try {
+            profilePicture = await ((url) => {
+                return axios.get(url)
+                .then(response => {
+                    console.log(response)
+                    return { type: response.headers["content-type"], data: response.data }
+                    // return response.data
+                }).catch(err => {
+                    console.log(err)
+                    this.props.enqueueSnackbar('There was an error loading your photo from disk', { variant: "error" })
+                })
+            })(this.state.profilePicture)
+            const file = new File([profilePicture.data], 'profilePicture', { type: profilePicture.type})
+        } catch(err) {
+            console.log(err)
+            this.props.enqueueSnackbar('There was an error parsing your photo data -- is it the right kind of file?' , { variant: 'error'})
+            return null
+        }
         const config = {
             headers: { type: 'content-type: multi-part/form' }
         }
@@ -87,7 +102,7 @@ class SignupFlow extends Component {
                 data.append(key, this.state[key])
             }
         }
-        const file = new File([profilePicture.data], 'profilePicture', { type: profilePicture.type})
+        
         console.log(file)
         data.append('profilePicture', file)
         axios.post('/api/auth/signup', data, config)
