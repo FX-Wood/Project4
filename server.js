@@ -22,12 +22,13 @@ const signupLimiter = new RateLimit({
     message: JSON.stringify({type: 'error', message: 'Account creation maximum exceeded!' })
 })
 
-if (process.env.NODE_ENV == 'development') {
-    mongoose.connect('mongodb://localhost/project4', {useNewUrlParser: true});
-} else if (process.env.NODE_ENV == 'production') {
+if (process.env.NODE_ENV == 'production') {
     app.use(express.static(__dirname + '/client/build'));
     mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true});
-}
+} else {
+    mongoose.connect('mongodb://localhost/project4', {useNewUrlParser: true});
+} 
+
 const db = mongoose.connection;
 
 db.on('open', () => {
@@ -52,4 +53,5 @@ app.get('*', (err, res) => {
 app.listen(process.env.PORT, () => {
     console.log(`You're listening to the sweet sounds of ${process.env.PORT} project4 in the morning...`)
     console.log(`Oh, and the port is`, process.env.PORT)
+    console.log(`Node environment: ${process.env.NODE_ENV}`)
 })
