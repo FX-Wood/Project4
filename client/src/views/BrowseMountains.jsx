@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
@@ -38,32 +39,27 @@ const styles = theme => ({
 class BrowseMountains extends Component {
     constructor(props) {
         super(props)
-        this.mountains = [
-            {
-                name: 'Crystal Mountain',
-                image: crystal,
-                website: 'www.crystalmountainresort.com',
-                twitter: 'https://twitter.com/crystalmt?lang=en',
-                weather: 'https://www.crystalmountainresort.com/the-mountain/mountain-report/weather-conditions/',
-                sizzle: 'The Largest ski resort in Washington State with 2,600 acres and over 50 named runs. Skiers and Snowboarders from all around Washington, the Pacific Northwest and the world flock to Crystal Mountain for the incredible terrain, breathtaking views of Mt. Rainier and Washington’s only Gondola.'
-            },
-            {
-                name: 'Stevens Pass',
-                image: stevens,
-                website: '',
-                twitter: '',
-                weather: '',
-                sizzle: 'Skiing at Stevens Pass is truly a unique experience; a great way to wind down after work, or just get your turns in without worrying about crowds',
-            },
-            {
-                name: 'The Summit at Snoqualmie',
-                image: summit,
-                website: '',
-                twitter: '',
-                weather: '',
-                sizzle: "Seattle's Home Mountain! The Summit has four unique areas and the most night skiing in Washington, plus snow tubing and Nordic skiing. All just an hour from the city on I-90"
-            }
-        ]
+        this.state = {
+            mountains: []
+        }
+    }
+    getMountains = () => {
+        console.log('getting mountains')
+        axios.get('/api/mountains')
+        .then(res => {
+            console.log('got mountains back', res.data)
+            this.setState({
+                mountains: res.data.data
+            })
+        })
+        .catch(err => {
+            console.log('error getting mountains')
+            console.log(err)
+        })
+    }
+
+    componentDidMount() {
+        this.getMountains()
     }
     render() {
         let content
@@ -72,7 +68,7 @@ class BrowseMountains extends Component {
             content = (
                 <Grid container justify="center" alignContent="center" spacing={40} className={classes.container}>
                     {
-                        this.mountains.map((mtn, i) => {
+                        this.state.mountains.map((mtn, i) => {
                             const { name, image, website, twitter, weather } = mtn
                             console.log(image)
                             return (

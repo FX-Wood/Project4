@@ -9,6 +9,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Button from '@material-ui/core/Button';
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Select from '@material-ui/core/Select';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import MomentUtils from '@date-io/moment';
 import DateFnsUtils from "@date-io/date-fns";
@@ -27,11 +32,16 @@ class RideUpdate extends Component {
             endFlex: false,
             note: '',
             offer: 0,
+            mountain: '',
+            mountains: [],
         }
     }
     handleSubmit = e => {
         console.log('submitting', this.state)
-        this.props.updateRide(this.props.rideID, this.state)
+        const { start, startFlex, end, endFlex, note, offer, mountain } = this.state
+        const data = { start, startFlex, end, endFlex, note, offer, mountain };
+
+        this.props.updateRide(this.props.rideID, data)
     }
 
     changeStart = date => {
@@ -71,9 +81,24 @@ class RideUpdate extends Component {
             this.props.enqueueSnackbar(JSON.stringify(err.response), {variant: 'error'})
         })
     }
+    getMountains = () => {
+        console.log('getting mountains')
+        axios.get('/api/mountains')
+        .then(res => {
+            console.log('got mountains back', res.data)
+            this.setState({
+                mountains: res.data.data
+            })
+        })
+        .catch(err => {
+            console.log('error getting mountains')
+            console.log(err)
+        })
+    }
     componentDidMount() {
         console.log('rideupdate didmount')
         this.getExistingRide()
+        this.getMountains()
     }
 
     render() {
@@ -81,10 +106,16 @@ class RideUpdate extends Component {
         const title = 'Update your ride';
         const submit = this.handleSubmit;
         const buttonText = 'Update ride';
+        const defaultItem = [<MenuItem key={0} value=""><em>None</em></MenuItem>]
+        const mountainItems = this.state.mountains.map((mtn, i) => {
+            return (
+                <MenuItem key={i + 1} value={mtn._id}>{mtn.name} </MenuItem>
+            )
+        })
+        const menu = defaultItem.concat(mountainItems)
         return (
             <MuiPickersUtilsProvider utils={DateFnsUtils} >
                 <Grid container direction="column" alignItems="center" justify="center" spacing={24}>
-                    <Button onClick={this.getExistingRide}>Get ride data</Button>
                     <Grid item>
                         <Typography variant="h3">{title}</Typography>
                     </Grid>
@@ -142,6 +173,32 @@ class RideUpdate extends Component {
                             multiline
                             rows={4}
                         />
+                    </Grid>
+                    <Grid item >
+                        <FormControl variant="outlined">
+                        <InputLabel
+                            // ref={ref => {
+                            // this.InputLabelRef = ref;
+                            // }}
+                            htmlFor="mountain"
+                        >
+                            Mountain
+                        </InputLabel>
+                        <Select
+                            value={this.state.mountain}
+                            onChange={this.handleInput}
+                            input={
+                            <OutlinedInput
+                                labelWidth={65}
+                                name="mountain"
+                                id="mountain"
+                                style={{width: '200px'}}
+                            />
+                            }
+                        >
+                            {menu}
+                        </Select>
+                        </FormControl>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Button variant="contained" color="primary" onClick={this.handleSubmit}>{buttonText}</Button>
