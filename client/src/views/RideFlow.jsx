@@ -105,13 +105,11 @@ class RideFlow extends Component {
         const title = 'Post a ride'
         const submit = this.handleSubmit
         const buttonText = 'Post ride'
-        const defaultItem = [<MenuItem key={0} value=""><em>None</em></MenuItem>]
-        const mountainItems = this.state.mountains.map((mtn, i) => {
+        const menu = this.state.mountains.map((mtn, i) => {
             return (
                 <MenuItem key={i + 1} value={mtn._id}>{mtn.name} </MenuItem>
             )
         })
-        const menu = defaultItem.concat(mountainItems)
         return (
             <MuiPickersUtilsProvider utils={DateFnsUtils} >
                 <Grid container direction="column" alignItems="center" justify="center" spacing={24} style={{minHeight: '100vh'}}>
