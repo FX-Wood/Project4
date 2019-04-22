@@ -1,5 +1,5 @@
 const Mountain = require('./models/mountain')
-
+const mongoose = require('mongoose')
 const mountains = [
     {
         name: 'Crystal Mountain',
@@ -24,16 +24,35 @@ const mountains = [
     }
 ]
 
+if (process.env.NODE_ENV == 'production') {
+    mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true});
+} else {
+    mongoose.connect('mongodb://localhost/project4', {useNewUrlParser: true});
+} 
 
-for (mtn in mountains) {
-    model = new Mountain(mtn)
-    model.save((err, savedMtn) => {
-        if (err) {
-            console.log('error saving mountain', err)
-        } else {
-            console.log('mountain save successful')
-            console.log(savedMtn)
+const db = mongoose.connection;
+
+db.on('open', () => {
+    console.log(`Connected to Mongo on ${db.host}: ${db.port}`)
+})
+db.on('error', (err) => {
+    console.log(`Database error:\n${err}`)
+})
+
+
+async function makeMtns(mtns) {
+    console.log('starting')
+    for (mtn of mtns) {
+        try {
+            let raw = new Mountain(mtn)
+            let saved = await raw.save()
+            console.log('saved', saved)
+        } catch(err) {
+            console.log('error', err)
         }
-    })
+    }
+    db.close()
 }
+
+makeMtns(mountains)
 
