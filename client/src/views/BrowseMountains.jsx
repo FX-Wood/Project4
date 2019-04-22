@@ -78,11 +78,9 @@ class BrowseMountains extends Component {
                                         <CardHeader
                                             title={name}
                                         />
-                                        <CardMedia 
-                                            className={classes.media}
-                                            src={image}
-
-                                        />
+                                        <Typography variant="body1">
+                                            {mtn.sizzle}
+                                        </Typography>
                                         <CardActions>
                                             <IconButton component={ Link } to={website}>
                                                 <ShareIcon />
