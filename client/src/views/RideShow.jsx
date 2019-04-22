@@ -13,6 +13,7 @@ import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import RideUpdate from '../components/RideUpdate';
 import moment from 'moment';
+import Chip from '@material-ui/core/Chip';
 
 const styles = theme => ({
     root: {
@@ -30,10 +31,24 @@ class RideShow extends Component {
         this.state = {
             rides: [],
             users: [],
+            mountains: [],
             phoneNumber: '',
+            filter: '',
         }
     }
-
+    getMountains = () => {
+        return axios.get('/api/mountains').then(res => {
+            console.log('got mountains', res)
+            this.props.enqueueSnackbar(JSON.stringify(res.data.message), {variant: 'success'})
+            this.setState({
+                mountains: res.data.data
+            })
+        })
+        .catch(err => {
+            console.log('err', err)
+            this.props.enqueueSnackbar(JSON.stringify(err.response), {variant: 'error'})
+        })
+    }
     getRides = () => {
         return axios.get('/api/share')
         .then(res => {
@@ -81,12 +96,36 @@ class RideShow extends Component {
     componentDidMount() {
         console.log('rides index did mount')
         this.joinRides()
+        this.getMountains()
     }
 
+    defaultFilter = (arr) => {
+        return arr
+    }
+    filterByMtn = (ride, mtnName) => {
+        console.log(ride, mtnName)
+        if (!mtnName) {
+            return ride
+        } else {
+            return ride.mountain.name === mtnName
+        }
+    }
+    changeFilter(filterString) {
+        console.log('changing filter to', filterString)
+        this.setState({
+            filter: filterString
+        })
+    }
     render() {
         const { classes } = this.props
-        
-        const rides = this.state.rides.map((ride, i) => {
+        const chips = this.state.mountains.map(mtn => {
+            console.log('making chip for', mtn)
+            console.log('name', mtn.name)
+            return <Grid item><Chip onClick={() => this.changeFilter(mtn.name)} label={mtn.name} /></Grid>
+        })
+        const rides = this.state.rides
+                .filter(ride => this.filterByMtn(ride, this.state.filter))
+                .map((ride, i) => {
             const start = new Date(ride.start)
             const mStart = moment(start)
             const end = new Date(ride.end)
@@ -127,6 +166,7 @@ class RideShow extends Component {
                 </Grid>
                 )
         })
+
         // const routes = this.state.rides.map((ride, i) => {
         //     const url = `/dash/ride/${ride._id}`
         //     return (
@@ -145,6 +185,10 @@ class RideShow extends Component {
         return (
             <Grid container style={{padding: '80px'}} alignContent="center" justify="center" className={classes.root} spacing={40}>
                 <Typography variant="h3">Folks that need a ride</Typography>
+                <Grid container style={{margin: '1em'}}>
+                    <Grid item><Chip onClick={() => this.changeFilter('')} label="All"/></Grid> 
+                    {chips}
+                </Grid>
                 {/* <Grid item>
                     {routes}
                 </Grid> */}
