@@ -81,7 +81,7 @@ class App extends Component {
       })
     } else {
       // If found, send token to be verified
-      axios.post('api/auth/me/from/token',{token})
+      axios.post('/api/auth/me/from/token',{token})
       .then( res => {
         if (res.data.type === 'error') {
           console.log('there was an older token sir, and it didn\'t check out', res.data)
