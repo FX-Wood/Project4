@@ -11,7 +11,7 @@ router.route('/')
                 console.log('ride creation err', err)
                 res.status(404).json({type: 'error', message: 'There was an error checking your rides'})
             } else {
-                Ride.find({user: mongoose.Types.ObjectId(user._id)}, (err, rides) => {
+                Ride.find({user: mongoose.Types.ObjectId(user._id)}).populate('mountain').exec((err, rides) => {
                     if (err) {
                         console.log('ride creation err', err)
                         res.status(404).json({type: 'error', message: 'There was an error checking your rides'})

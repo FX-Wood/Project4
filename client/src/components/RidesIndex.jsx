@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import RideUpdate from '../components/RideUpdate';
+import moment from 'moment';
 
 const styles = theme => ({
     root: {
@@ -93,7 +94,9 @@ class RidesIndex extends Component {
         
         const rides = this.state.rides.map((ride, i) => {
             const start = new Date(ride.start)
+            const mStart = moment(start)
             const end = new Date(ride.end)
+            const mEnd = moment(end)
             const { startFlex, endFlex } = ride
             console.log('start', start)
             console.log('end', end)
@@ -101,9 +104,14 @@ class RidesIndex extends Component {
             return (
                 <Grid key={i} item>
                     <Card style={{padding: '2em'}}>
-                        <Grid item><Typography variant="body1">{ride.note}</Typography></Grid>
+                        <Grid container spacing={24}>
+                            <Grid item><Typography variant="h6">{String(mStart.format('D / MMMM'))}</Typography></Grid>
+                            <Grid item><Typography variant="h6" color="textSecondary">{ride.mountain.name}</Typography></Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item><Typography variant="body1">{ride.note}</Typography></Grid>
+                        </Grid>
                         <Grid item container spacing={24}>
-                            <Grid item><Typography variant="body1">Date: {start.toLocaleDateString()}</Typography></Grid>
                             <Grid item>
                                 <Typography variant="body1">
                                     Start of day: {start.toLocaleTimeString()}
@@ -121,8 +129,10 @@ class RidesIndex extends Component {
                                     Contact phone: {this.state.phoneNumber}
                                 </Typography>
                             </Grid>
-                            <Grid item><Button onClick={() => this.goToEditRide(ride._id)}><EditIcon/></Button></Grid>
-                            <Grid item><Button onClick={() => this.deleteRide(ride._id)}><CloseIcon /></Button></Grid>
+                            <Grid container>
+                                <Grid item><Button onClick={() => this.goToEditRide(ride._id)}><EditIcon/></Button></Grid>
+                                <Grid item><Button onClick={() => this.deleteRide(ride._id)}><CloseIcon /></Button></Grid>
+                            </Grid>
                         </Grid>
                     </Card>
                 </Grid>
