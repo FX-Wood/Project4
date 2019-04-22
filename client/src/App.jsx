@@ -13,6 +13,8 @@ import BrowseMountains from './views/BrowseMountains';
 import RideFlow from './views/RideFlow';
 import RideShow from './views/RideShow';
 
+// Components
+import AppBar from './components/AppBar'
 // material UI
 import CssBaseline from '@material-ui/core/CssBaseline';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
@@ -131,35 +133,44 @@ class App extends Component {
       logout: this.logout,
       liftMessage: this.liftMessageToState
     }
+
+    let content
+    if (this.state.user) {
+      content = (
+        <Switch>
+              <Route 
+                exact path='/'
+                render={() => <Splash user={user} />} />
+              <Route 
+                path="/signup" 
+                render={() => <SignupFlow {...authProps} />} />
+              <Route 
+                exact path="/login" 
+                render={() => <LoginFlow {...authProps}/>} />
+              <Route
+                path="/dash" render={() => <Dash user={user} login={this.liftTokenToState} logout={this.logout} /> } />
+              <Route
+                exact path="/browse/mtn"
+                render={ ()=> <BrowseMountains user={user} addMountain={this.addMountain} {...authProps} />}
+              />
+              <Route
+                exact path="/ride/new"
+                component={RideFlow}
+              />
+              <Route
+                exact path="/browse/rides"
+                render={ () => <RideShow user={user} />}
+              />
+            </Switch>
+      )
+    } else {
+        content = <Splash />
+    }
     return (
       <MuiThemeProvider theme={theme}>
           <CssBaseline />
-          <Switch>
-            <Route 
-              exact path='/'
-              render={() => <Splash user={user} />} />
-            <Route 
-              path="/signup" 
-              render={() => <SignupFlow {...authProps} />} />
-            <Route 
-              exact path="/login" 
-              render={() => <LoginFlow {...authProps}/>} />
-            <Route
-              path="/dash" render={() => <Dash user={user} login={this.liftTokenToState} logout={this.logout} /> } />
-            <Route
-              exact path="/browse/mtn"
-              render={ ()=> <BrowseMountains user={user} addMountain={this.addMountain} {...authProps} />}
-            />
-            <Route
-              exact path="/ride/new"
-              component={RideFlow}
-            />
-            <Route
-              exact path="/browse/rides"
-              render={ () => <RideShow user={user} />}
-            />
-
-          </Switch>
+          <AppBar user={user} logout={this.props.logout} />
+          {content}
       </MuiThemeProvider>
     )
   }
