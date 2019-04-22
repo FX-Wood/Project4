@@ -46,6 +46,7 @@ app.use('/api/auth', require('./routes/auth'))
 app.use('/api/user', expressJWT({ secret: process.env.JWT_SECRET }), require('./routes/user'))
 app.use('/api/ride', expressJWT({ secret: process.env.JWT_SECRET }), require('./routes/ride'))
 app.use('/api/mountains', expressJWT({ secret: process.env.JWT_SECRET }), require('./routes/mountain'))
+app.use('/api/share', expressJWT({ secret: process.env.JWT_SECRET }), require('./routes/share'))
 
 app.get('*', (err, res) => {
     console.log('GET *')
