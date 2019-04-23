@@ -118,10 +118,10 @@ class RideShow extends Component {
     }
     render() {
         const { classes } = this.props
-        const chips = this.state.mountains.map(mtn => {
+        const chips = this.state.mountains.map((mtn, i) => {
             console.log('making chip for', mtn)
             console.log('name', mtn.name)
-            return <Grid item><Chip onClick={() => this.changeFilter(mtn.name)} label={mtn.name} /></Grid>
+            return <Grid item><Chip key={i} onClick={() => this.changeFilter(mtn.name)} label={mtn.name} /></Grid>
         })
         const rides = this.state.rides
                 .filter(ride => this.filterByMtn(ride, this.state.filter))
