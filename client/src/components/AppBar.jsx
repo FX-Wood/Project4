@@ -29,10 +29,11 @@ function ButtonAppBar(props) {
     if (props.user) {
         buttons = (
             <>
-                <Button variant="contained" className={classes.menuButton} component={Link} to={'/browse/mtn'}  color="primary">Browse mountains</Button>
-                <Button variant="contained" className={classes.menuButton} component={Link} to={'/browse/rides'}  color="primary">Browse rides</Button>
-                <Button variant="contained" className={classes.menuButton} component={Link} to={'/ride/new'}  color="primary">Get a ride</Button>
-                <Button variant="contained" className={classes.menuButton} onClick={props.logout} color="primary" >Logout</Button>
+              <Button variant="contained" className={classes.menuButton} component={Link} to={'/dash'}  color="primary">Dashboard</Button>
+              <Button variant="contained" className={classes.menuButton} component={Link} to={'/browse/mtn'}  color="primary">Browse mountains</Button>
+              <Button variant="contained" className={classes.menuButton} component={Link} to={'/browse/rides'}  color="primary">Browse rides</Button>
+              <Button variant="contained" className={classes.menuButton} component={Link} to={'/ride/new'}  color="primary">Get a ride</Button>
+              <Button variant="contained" className={classes.menuButton} onClick={props.logout} color="primary" >Logout</Button>
             </>
         )
     } else {
