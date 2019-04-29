@@ -1,6 +1,6 @@
 {
-  "short_name": "JWT Boilerplate",
-  "name": "Afunctional JWT token auth backend",
+  "short_name": "Mountain Road",
+  "name": "A ridesharing app for skiers and snowboarders",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
