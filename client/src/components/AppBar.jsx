@@ -16,7 +16,8 @@ const styles = {
   },
   header: {
     flexGrow: 1,
-    marginLeft: 20
+    marginLeft: 20,
+    textDecoration: 'none',
   },
   appBarBtn: {
     marginLeft: -12,
@@ -51,7 +52,7 @@ function ButtonAppBar(props) {
     <div className={classes.root}>
         <AppBar position="static">
         <Toolbar>
-            <Typography variant="h6" color="inherit" className={classes.header}>
+            <Typography component={Link} to="/" variant="h6" color="inherit" className={classes.header}>
                 MountainRoad
             </Typography>
             {buttons}
