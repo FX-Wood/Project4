@@ -14,13 +14,14 @@ const styles = {
   root: {
     flexGrow: 1,
   },
-  grow: {
+  header: {
     flexGrow: 1,
+    marginLeft: 20
   },
-  menuButton: {
+  appBarBtn: {
     marginLeft: -12,
     marginRight: 20,
-  },
+  }
 };
 
 function ButtonAppBar(props) {
@@ -29,18 +30,18 @@ function ButtonAppBar(props) {
     if (props.user) {
         buttons = (
             <>
-              <Button variant="contained" className={classes.menuButton} component={Link} to={'/dash'}  color="primary">Dashboard</Button>
-              <Button variant="contained" className={classes.menuButton} component={Link} to={'/browse/mtn'}  color="primary">Browse mountains</Button>
-              <Button variant="contained" className={classes.menuButton} component={Link} to={'/browse/rides'}  color="primary">Browse rides</Button>
-              <Button variant="contained" className={classes.menuButton} component={Link} to={'/ride/new'}  color="primary">Get a ride</Button>
-              <Button variant="contained" className={classes.menuButton} onClick={props.logout} color="primary" >Logout</Button>
+              <Button className={classes.appBarBtn} component={Link} to={'/dash'}  color="inherit">Dashboard</Button>
+              <Button className={classes.appBarBtn} component={Link} to={'/browse/mtn'}  color="inherit">Browse mountains</Button>
+              <Button className={classes.appBarBtn} component={Link} to={'/browse/rides'}  color="inherit">Browse rides</Button>
+              <Button className={classes.appBarBtn} component={Link} to={'/ride/new'}  color="inherit">Get a ride</Button>
+              <Button className={classes.appBarBtn} onClick={props.logout} color="inherit" >Logout</Button>
             </>
         )
     } else {
         buttons = (
             <>
-            <Button component={Link} to="/login" variant="contained" color="primary">Login</Button>
-            <Button component={Link} to="/signup" variant="contained" color="primary">Signup</Button>
+            <Button component={Link} to="/login" className={classes.appBarBtn} color="inherit">Login</Button>
+            <Button component={Link} to="/signup" className={classes.appBarBtn} color="inherit">Signup</Button>
             </>
         )
     }
@@ -50,7 +51,7 @@ function ButtonAppBar(props) {
     <div className={classes.root}>
         <AppBar position="static">
         <Toolbar>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
+            <Typography variant="h6" color="inherit" className={classes.header}>
                 MountainRoad
             </Typography>
             {buttons}
