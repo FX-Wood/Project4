@@ -1,11 +1,12 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import pink from '@material-ui/core/colors/pink';
-import indigo from '@material-ui/core/colors/indigo';
+import green from '@material-ui/core/colors/green';
+import amber from '@material-ui/core/colors/amber';
 
 const theme = createMuiTheme({
     palette: {
-        primary: pink,
-        secondary: indigo
+        primary: green,
+        secondary: amber,
+        type: "dark"
     },
     spacing: {
         unit: 1
