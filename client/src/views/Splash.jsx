@@ -24,10 +24,10 @@ const Splash = ({ user }) => {
                     </Grid>
                     <Grid item container spacing={40} direction="column" alignContent="center" alignItems="flex-start" style={{maxWidth: '40%'}}>
                         <Grid item >
-                            <Button component={Link} to="/login" variant="contained" color="primary">Login</Button>
+                            <Button component={Link} to="/login" variant="contained" color="primary" style={{minWidth: '100px'}}>Login</Button>
                         </Grid>
                         <Grid item >
-                            <Button component={Link} to="/signup" variant="contained" color="primary">Sign up</Button>
+                            <Button component={Link} to="/signup" variant="contained" color="primary" style={{minWidth: '100px'}}>Sign up</Button>
                         </Grid>
                     </Grid>
                 </Grid>

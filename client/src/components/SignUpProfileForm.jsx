@@ -58,7 +58,7 @@ const signupProfileForm = (props) => {
                     onChange={handleChange}
                     value={homeMountain}
                     type="text"
-                    placeholder="home is where the heart is"
+                    placeholder="where the heart is"
                     variant="outlined"
                 />
             </Grid>
