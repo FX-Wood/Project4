@@ -51,7 +51,7 @@ function ButtonAppBar(props) {
         <AppBar position="static">
         <Toolbar>
             <Typography variant="h6" color="inherit" className={classes.grow}>
-                RideShare
+                MountainRoad
             </Typography>
             {buttons}
         </Toolbar>

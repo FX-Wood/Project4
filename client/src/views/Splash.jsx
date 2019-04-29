@@ -12,7 +12,7 @@ const Splash = ({ user }) => {
             <Grid container justify="center" alignItems="center" spacing={40} style={{minHeight: '100vh'}}>
                 <Grid item container direction="column" spacing={40} style={{maxWidth: '40%'}}>
                     <Grid item >
-                        <Typography variant="h1" >RideShare</Typography>
+                        <Typography variant="h1" >MountainRoad</Typography>
                     </Grid>
                     <Grid item >
                         <Typography variant="headline" color="textSecondary" >Get a ride up to the hill!</Typography>
