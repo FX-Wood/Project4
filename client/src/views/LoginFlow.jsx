@@ -66,35 +66,37 @@ class LoginFlow extends Component {
     }
     render() {
         return (
-            <Grid container spacing={24} direction="column" justify="center" alignItems="center" style={{minHeight: '100vh'}} >
-                <Grid item >
-                    <Typography variant="h3">Log in</Typography>
+            <div className="gridReset" style={{padding: '12px'}}>
+                <Grid container spacing={24} direction="column" justify="center" alignItems="center" style={{minHeight: '90vh'}} >
+                    <Grid item >
+                        <Typography variant="h3">Log in</Typography>
+                    </Grid>
+                    <Grid item >
+                        <TextField
+                            onChange={this.handleChange}
+                            value={this.state.email}
+                            label="email"
+                            type="email"
+                            name="email"
+                            variant="outlined"
+                            placeholder="Enter your email..."/>
+                    </Grid>
+                    <Grid item >
+                        <TextField
+                            onChange={this.handleChange}
+                            value={this.state.password}
+                            onKeyDown={this.keyBoardSubmit}
+                            label="password"
+                            type="password"
+                            name="password"
+                            variant="outlined"
+                            placeholder="Enter your password..."/>
+                    </Grid>
+                    <Grid item>
+                        <Button variant="contained" color="primary" onClick={this.handleSubmit}>Log In!</Button>
+                    </Grid>
                 </Grid>
-                <Grid item >
-                    <TextField
-                        onChange={this.handleChange}
-                        value={this.state.email}
-                        label="email"
-                        type="email"
-                        name="email"
-                        variant="outlined"
-                        placeholder="Enter your email..."/>
-                </Grid>
-                <Grid item >
-                    <TextField
-                        onChange={this.handleChange}
-                        value={this.state.password}
-                        onKeyDown={this.keyBoardSubmit}
-                        label="password"
-                        type="password"
-                        name="password"
-                        variant="outlined"
-                        placeholder="Enter your password..."/>
-                </Grid>
-                <Grid item>
-                    <Button variant="contained" color="primary" onClick={this.handleSubmit}>Log In!</Button>
-                </Grid>
-            </Grid>
+            </div>
         )
     }
 }

@@ -32,7 +32,10 @@ const styles = theme => ({
       },
     container: {
         padding: '10%',
-        minHeight: '100vh'
+        minHeight: '90vh'
+    },
+    gridReset: {
+        padding: 20
     }
 })
 
@@ -66,38 +69,40 @@ class BrowseMountains extends Component {
         const { classes } = this.props
         if (this.props.user) {
             content = (
-                <Grid container justify="center" alignContent="center" spacing={40} className={classes.container}>
-                    {
-                        this.state.mountains.map((mtn, i) => {
-                            const { name, image, website, twitter, weather } = mtn
-                            console.log(image)
-                            return (
-                                <Grid key={i} item xs={12} md={6} >
-                                    <Card className={classes.card}>
-                                    <CardContent>
-                                        <CardHeader
-                                            title={name}
-                                        />
-                                        <Typography variant="body1">
-                                            {mtn.sizzle}
-                                        </Typography>
-                                        <CardActions>
-                                            <a href={website} target="_blank">
-                                                <IconButton>
-                                                    <ShareIcon />
+                <div className={classes.gridReset}>
+                    <Grid container justify="center" alignContent="center" spacing={40} className={classes.container}>
+                        {
+                            this.state.mountains.map((mtn, i) => {
+                                const { name, image, website, twitter, weather } = mtn
+                                console.log(image)
+                                return (
+                                    <Grid key={i} item xs={12} md={6} >
+                                        <Card className={classes.card}>
+                                        <CardContent>
+                                            <CardHeader
+                                                title={name}
+                                            />
+                                            <Typography variant="body1">
+                                                {mtn.sizzle}
+                                            </Typography>
+                                            <CardActions>
+                                                <a href={website} target="_blank">
+                                                    <IconButton>
+                                                        <ShareIcon />
+                                                    </IconButton>
+                                                </a>
+                                                <IconButton onClick={() => this.props.addMountain(name)}>
+                                                    <FavoriteIcon />
                                                 </IconButton>
-                                            </a>
-                                            <IconButton onClick={() => this.props.addMountain(name)}>
-                                                <FavoriteIcon />
-                                            </IconButton>
-                                        </CardActions>
-                                    </CardContent>
-                                    </Card>
-                                </Grid>
-                            )
-                        })
-                    }
-                </Grid>
+                                            </CardActions>
+                                        </CardContent>
+                                        </Card>
+                                    </Grid>
+                                )
+                            })
+                        }
+                    </Grid>
+                </div>
             )
         } else {
             content = <ReAuthorize login={this.props.login} />

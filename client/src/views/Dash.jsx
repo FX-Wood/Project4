@@ -45,30 +45,32 @@ class Dash extends Component {
             const { first, last, snowboarder, skier, profilePicture } = this.props.user.profile
             console.log(profilePicture)
                 content = (
-                    <Grid container direction='row' justify="center" alignItems="center" spacing={24} style={{minHeight: '100vh'}}>
-                        <Grid item>
-                            <Typography variant="h3">Dashboard</Typography>
-                            <Typography variant="subtitle1">{ first + ' ' + last }</Typography>
+                    <div className="gridReset" style={{padding: '12px'}}>
+                        <Grid container direction='row' justify="center" alignItems="center" spacing={24} style={{minHeight: '90vh'}}>
+                            <Grid item>
+                                <Typography variant="h3">Dashboard</Typography>
+                                <Typography variant="subtitle1">{ first + ' ' + last }</Typography>
+                            </Grid>
+                            {/* <Grid item>
+                                <img src={ URL.createObjectURL(new File([profilePicture.buffer], 'profilePicture', {type: profilePicture.mimetype}))} alt="user avatar"/>
+                            </Grid> */}
+                            <Grid item>
+                                <Button component={Link} to={'/browse/mtn'}  variant="contained" color="primary">Browse mountains</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button component={Link} to={'/browse/rides'}  variant="contained" color="primary">Browse rides</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button component={Link} to={'/ride/new'}  variant="contained" color="primary">Get a ride</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button onClick={this.props.logout} variant="contained" color="primary" >Logout</Button>
+                            </Grid>
+                            <Grid item xs={12} >
+                                <RidesIndex />
+                            </Grid>
                         </Grid>
-                        {/* <Grid item>
-                            <img src={ URL.createObjectURL(new File([profilePicture.buffer], 'profilePicture', {type: profilePicture.mimetype}))} alt="user avatar"/>
-                        </Grid> */}
-                        <Grid item>
-                            <Button component={Link} to={'/browse/mtn'}  variant="contained" color="primary">Browse mountains</Button>
-                        </Grid>
-                        <Grid item>
-                            <Button component={Link} to={'/browse/rides'}  variant="contained" color="primary">Browse rides</Button>
-                        </Grid>
-                        <Grid item>
-                            <Button component={Link} to={'/ride/new'}  variant="contained" color="primary">Get a ride</Button>
-                        </Grid>
-                        <Grid item>
-                            <Button onClick={this.props.logout} variant="contained" color="primary" >Logout</Button>
-                        </Grid>
-                        <Grid item xs={12} >
-                            <RidesIndex />
-                        </Grid>
-                    </Grid>
+                    </div>
                 )
         } else {
             content = <ReAuthorize login={this.props.login} />

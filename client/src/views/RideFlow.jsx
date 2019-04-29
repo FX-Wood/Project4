@@ -112,7 +112,8 @@ class RideFlow extends Component {
         })
         return (
             <MuiPickersUtilsProvider utils={DateFnsUtils} >
-                <Grid container direction="column" alignItems="center" justify="center" spacing={24} style={{minHeight: '100vh'}}>
+            <div className="gridReset" style={{padding: '12px'}}>
+                <Grid container direction="column" alignItems="center" justify="center" spacing={24} style={{minHeight: '90vh'}}>
                     <Grid item>
                         <Typography variant="h3">{title}</Typography>
                     </Grid>
@@ -204,6 +205,7 @@ class RideFlow extends Component {
                         <Button variant="contained" color="primary" onClick={submit}>{buttonText}</Button>
                     </Grid>
                 </Grid>
+            </div>
             </MuiPickersUtilsProvider>
         )
     }

@@ -181,8 +181,8 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
           <CssBaseline />
-          <AppBar user={user} logout={this.logout} />
-          {content}
+              <AppBar user={user} logout={this.logout} />
+                {content}
       </MuiThemeProvider>
     )
   }

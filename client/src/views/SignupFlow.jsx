@@ -12,6 +12,7 @@ const styles = theme => ({
     signup: {
         display: 'flex',
         flexDirection: 'column',
+        padding: '12px',
         paddingTop: '24px',
         alignItems: 'center',
         JustifyContent: 'center',
@@ -171,7 +172,7 @@ class SignupFlow extends Component {
         
         return (
             <Grid className={classes.signup}>
-                <Grid container direction="column" alignItems="center" justify="center" spacing={24} style={{minHeight: '100vh'}}>
+                <Grid container direction="column" alignItems="center" justify="center" spacing={24} style={{minHeight: '90vh'}}>
                     <Typeography variant="h3">Sign Up</Typeography>
                     <Route exact path="/signup" render={() => <SignUpInitialForm {...initialProps} /> } />
                     <Route path="/signup/profile" render={() => <SignUpProfileForm {...profileProps}  /> } />
