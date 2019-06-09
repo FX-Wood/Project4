@@ -21,36 +21,47 @@ const LoginForm = ({login, logout, openSnackbar}) => {
     const firstInput = useRef()
     useEffect(() => { firstInput.current.focus() }, []) // no implicit return
 
+    const emailController = useRef();
+    const passwordController = useRef();
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.post('/api/auth/login', values)
-        .then( (res) => {
-            if (res.data.type === 'error') {
-                throw new Error(res.data)
-            } else {
-                localStorage.setItem('jwtToken', res.data.token)
-                login(res.data)
-            }
-        }).catch(err => {
-            let message;
-            if (err.response) {
-                // The request was made and the server responded with a status code
-                // that falls out of the range of 2xx
-                message = `${err.response.status}: ${err.response.data.message || err}`
-            } else if (err.request) {
-                // The request was made but no response was received
-                message = '404: server not found'
-            } else {
-                // Something happened in setting up the request that triggered an Error
-                message = 'Error: ' + err
-            }
-            // handle too many requests
-            if (err.status === '429') {
-                message = `${err.response.status}: too many requests`
-            }
-            openSnackbar(message, {variant: 'error'})
-        });
+
+        if (!values.email) {
+            openSnackbar("please enter a valid email address", { variant: "warning" })
+        }
+        if (!values.password) {
+            openSnackbar("please enter a valid password", { variant: "warning" })
+        }
+        if (values.email && values.password) {
+            axios.post('/api/auth/login', values)
+            .then( (res) => {
+                if (res.data.type === 'error') {
+                    throw new Error(res.data)
+                } else {
+                    localStorage.setItem('jwtToken', res.data.token)
+                    login(res.data)
+                }
+            }).catch(err => {
+                let message;
+                if (err.response) {
+                    // The request was made and the server responded with a status code
+                    // that falls out of the range of 2xx
+                    message = `${err.response.status}: ${err.response.data.message || err}`
+                } else if (err.request) {
+                    // The request was made but no response was received
+                    message = '404: server not found'
+                } else {
+                    // Something happened in setting up the request that triggered an Error
+                    message = 'Error: ' + err
+                }
+                // handle too many requests
+                if (err.status === '429') {
+                    message = `${err.response.status}: too many requests`
+                }
+                openSnackbar(message, {variant: 'error'})
+            });
+        }
     }
 
     return (
@@ -77,9 +88,10 @@ const LoginForm = ({login, logout, openSnackbar}) => {
                     label="email"
                     type="email"
                     name="email"
-                    variant="outlined"
                     placeholder="Enter your email..."
-                    autocomplete="username" />
+                    autocomplete="username"
+                    variant="outlined"
+                    />
             </Grid>
 
             <Grid item >
