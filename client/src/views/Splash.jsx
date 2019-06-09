@@ -16,10 +16,10 @@ const Splash = ({ user }) => {
                             <Typography variant="h1" >MountainRoad</Typography>
                         </Grid>
                         <Grid item >
-                            <Typography variant="headline" color="textSecondary" >Get a ride up to the hill!</Typography>
+                            <Typography variant="h3" color="textSecondary" >Get a ride up to the hill!</Typography>
                         </Grid>
                         <Grid item style={{maxWidth: '80%'}}>
-                            <Typography variant="">Make a post when you are going up to the hill and need a ride. If you are going up with empty seats, sign on and offer them to other riders!</Typography>
+                            <Typography variant="subtitle1">Make a post when you are going up to the hill and need a ride. If you are going up with empty seats, sign on and offer them to other riders!</Typography>
                         </Grid>
                     </Grid>
                     <Grid item container spacing={40} direction="column" alignContent="center" alignItems="flex-start" style={{maxWidth: '40%'}}>

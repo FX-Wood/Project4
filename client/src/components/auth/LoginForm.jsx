@@ -77,7 +77,7 @@ const LoginForm = ({login, logout, openSnackbar}) => {
             <Grid item >
                 <Typography
                     variant="h3"
-                    children={"Log In"}/>
+                    children={"Log in"}/>
             </Grid>
 
             <Grid item >

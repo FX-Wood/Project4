@@ -3,6 +3,7 @@ import axios from 'axios';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
 const SignupForm = ({login, openSnackbar}) => {
     
@@ -71,6 +72,11 @@ const SignupForm = ({login, openSnackbar}) => {
             style={{minHeight: '90vh'}}
             onSubmit={handleSubmit}
             >
+            <Grid item >
+                <Typography
+                    variant="h3"
+                    children={"Sign Up"}/>
+            </Grid>
             <Grid item >
                 <TextField 
                     inputRef={firstInput}
