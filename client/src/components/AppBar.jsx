@@ -41,8 +41,8 @@ function ButtonAppBar(props) {
     } else {
         buttons = (
             <>
-            <Button component={Link} to="/login" className={classes.appBarBtn} color="inherit">Login</Button>
-            <Button component={Link} to="/signup" className={classes.appBarBtn} color="inherit">Signup</Button>
+            <Button component={Link} to="/signup" className={classes.appBarBtn} color="inherit">Sign Up</Button>
+            <Button component={Link} to="/login" className={classes.appBarBtn} color="inherit">Log in</Button>
             </>
         )
     }

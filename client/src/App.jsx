@@ -6,8 +6,8 @@ import { withSnackbar } from 'notistack';
 
 // Pages
 import Splash from './views/Splash';
-import SignupFlow from './views/SignupFlow';
-import LoginFlow from './views/LoginFlow';
+import SignupForm from './components/auth/SignupForm';
+import LoginForm from './components/auth/LoginForm';
 import Dash from './views/Dash';
 import BrowseMountains from './views/BrowseMountains';
 import RideFlow from './views/RideFlow';
@@ -50,10 +50,10 @@ class App extends Component {
     this.props.history.push(path)
   }
 
-  liftMessageToState({ message }) {
-    console.log('[App.jsx]: lifting error to state', { message })
-    this.props.enqueueSnackbar(JSON.stringify(message))
-    this.setState({ message })
+  liftMessageToState(message, { variant }) {
+    console.log('[App.jsx]: lifting error to state', message)
+    this.props.enqueueSnackbar(JSON.stringify(message), { variant })
+    this.setState({message})
 
   }
 
@@ -131,7 +131,7 @@ class App extends Component {
     const authProps = {
       login: this.liftTokenToState,
       logout: this.logout,
-      liftMessage: this.liftMessageToState
+      openSnackbar: this.liftMessageToState
     }
 
     let content
@@ -143,10 +143,10 @@ class App extends Component {
                 render={() => <Splash user={user} />} />
               <Route 
                 path="/signup" 
-                render={() => <SignupFlow {...authProps} />} />
+                render={() => <SignupForm {...authProps} />} />
               <Route 
                 exact path="/login" 
-                render={() => <LoginFlow {...authProps}/>} />
+                render={() => <LoginForm {...authProps}/>} />
               <Route
                 path="/dash" render={() => <Dash user={user} login={this.liftTokenToState} logout={this.logout} /> } />
               <Route
@@ -171,10 +171,10 @@ class App extends Component {
             render={() => <Splash user={user} />} />
           <Route 
             path="/signup" 
-            render={() => <SignupFlow {...authProps} />} />
+            render={() => <SignupForm {...authProps} />} />
           <Route 
             path="/login" 
-            render={() => <LoginFlow {...authProps}/>} />
+            render={() => <LoginForm {...authProps}/>} />
           </>
           )
     }
